@@ -4,6 +4,7 @@ import React from 'react';
 import { BoltIcon, DocumentTextIcon, VideoCameraIcon, PlayIcon } from '@heroicons/react/24/outline';
 import { Header, Footer } from '@/components/layout';
 import { Button, Card, EventCard } from '@/components/ui';
+import { VideoRecommendationSection } from '@/components/home/VideoRecommendationSection';
 import type { Event } from '@/types';
 import Link from 'next/link';
 
@@ -262,6 +263,9 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* Featured Videos Section */}
+        <VideoRecommendationSection />
 
         {/* Newsletter Section */}
         <section className="py-20 bg-gray-950/50">

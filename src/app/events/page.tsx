@@ -45,7 +45,7 @@ const allEvents: Event[] = [
   },
 ];
 
-const tags = ['ALL', 'BREAKING', 'ANALYSIS', 'INVESTIGATION', 'BUSINESS', 'TECHNICAL', 'COMPARISON'];
+const tags = ['ALL', 'BREAKING', 'ANALYSIS', 'INVESTIGATION'];
 
 export default function EventsPage() {
   const [searchQuery, setSearchQuery] = useState('');

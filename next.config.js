@@ -14,15 +14,18 @@ const nextConfig = {
 
   // Image optimization
   images: {
-    // Define allowed image domains
-    domains: [
-      'images.unsplash.com',
-      'via.placeholder.com',
-      'picsum.photos',
-      'res.cloudinary.com',
-      'grok4.live',
-      'pagead2.googlesyndication.com',
-      'googletagmanager.com',
+    // Use remotePatterns instead of deprecated domains
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'unsplash.com',
+        pathname: '/**',
+      },
     ],
     // Enable image formats
     formats: ['image/webp', 'image/avif'],
@@ -43,47 +46,29 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/:path*',
         headers: [
-          // Security headers
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
           {
             key: 'X-Frame-Options',
-            value: 'DENY',
+            value: 'SAMEORIGIN',
           },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
-          },
-          // Content Security Policy - updated for GA/AdSense
           {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' *.vercel.com *.googletagmanager.com *.googlesyndication.com *.google-analytics.com *.doubleclick.net",
-              "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
-              "img-src 'self' data: blob: *.unsplash.com *.cloudinary.com *.vercel.com *.googlesyndication.com *.google-analytics.com *.doubleclick.net",
-              "font-src 'self' fonts.gstatic.com",
-              "connect-src 'self' *.vercel.com *.analytics.google.com *.google-analytics.com *.googlesyndication.com",
-              "media-src 'self' blob:",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com",
+              "img-src 'self' data: https: blob:",
+              "media-src 'self' https:",
+              "connect-src 'self' https://www.google-analytics.com https://analytics.google.com",
+              "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://pagead2.googlesyndication.com",
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
-              "frame-ancestors 'none'",
-              "upgrade-insecure-requests"
+              "frame-ancestors 'self'",
             ].join('; '),
-          }
+          },
         ],
       },
       // Cache static assets
@@ -203,8 +188,8 @@ const nextConfig = {
 
   // TypeScript config
   typescript: {
-    // Type checking during build
-    tsconfigPath: './tsconfig.json',
+    // Disable type checking during build (optional, for faster builds)
+    ignoreBuildErrors: false,
   },
 
   // ESLint config

@@ -5,4 +5,5 @@ export { Input } from './Input';
 export { Timeline } from './Timeline';
 export { TableOfContents } from './TableOfContents';
 export { ArticleLayout } from './ArticleLayout';
-export { VideoCard } from './VideoCard'; 
+export { VideoCard } from './VideoCard';
+export { OptimizedImage } from './OptimizedImage'; 

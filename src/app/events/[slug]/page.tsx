@@ -35,6 +35,19 @@ const events: Record<string, Event> = {
     views: 8762,
     author: 'AI Research Team',
   },
+  'grok-evolution-woke-to-anti-woke': {
+    id: '3',
+    title: 'GROK\'S EVOLUTION: From Woke to Anti-Woke Gone Wrong',
+    description: 'Tracking the ideological shifts in Grok\'s training and the unintended consequences that led to recent controversies.',
+    content: `Comprehensive analysis of Grok's evolution...`,
+    slug: 'grok-evolution-woke-to-anti-woke',
+    timestamp: '2025-07-10T08:00:00Z',
+    tag: 'INVESTIGATION',
+    tagColor: 'yellow',
+    readingTime: 15,
+    views: 6891,
+    author: 'Grok4.Live Editorial Team',
+  },
 };
 
 // Mock timeline data - Updated to 2025
