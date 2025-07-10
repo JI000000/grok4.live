@@ -7,7 +7,7 @@ import { EventCard, Button, Input } from '@/components/ui';
 import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
 import type { Event } from '@/types';
 
-// Mock events data - Updated to 2025
+// Mock events data - 只包含实际存在的文章
 const allEvents: Event[] = [
   {
     id: '1',
@@ -42,39 +42,6 @@ const allEvents: Event[] = [
     tagColor: 'yellow',
     readingTime: 15,
     views: 6891,
-  },
-  {
-    id: '4',
-    title: 'xAI FUNDING SERIES B: $6 Billion Valuation Deep Dive',
-    description: 'Analysis of xAI\'s latest funding round, investor sentiment, and what this means for Grok\'s future development.',
-    slug: 'xai-funding-series-b-analysis',
-    timestamp: '2024-07-09T14:00:00Z',
-    tag: 'BUSINESS',
-    tagColor: 'green',
-    readingTime: 10,
-    views: 5432,
-  },
-  {
-    id: '5',
-    title: 'COLOSSUS SUPERCOMPUTER: The Hardware Behind Grok',
-    description: 'Technical deep dive into xAI\'s custom supercomputing infrastructure and how it powers Grok\'s capabilities.',
-    slug: 'colossus-supercomputer-analysis',
-    timestamp: '2024-07-08T10:00:00Z',
-    tag: 'TECHNICAL',
-    tagColor: 'purple',
-    readingTime: 18,
-    views: 4123,
-  },
-  {
-    id: '6',
-    title: 'GROK VS CHATGPT: Performance Benchmark Comparison',
-    description: 'Comprehensive testing and comparison of Grok 4 against ChatGPT-4, Claude, and other leading AI models.',
-    slug: 'grok-vs-chatgpt-benchmark',
-    timestamp: '2024-07-07T16:30:00Z',
-    tag: 'COMPARISON',
-    tagColor: 'blue',
-    readingTime: 14,
-    views: 9876,
   },
 ];
 

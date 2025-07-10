@@ -5,6 +5,7 @@ import { BoltIcon, DocumentTextIcon, VideoCameraIcon, PlayIcon } from '@heroicon
 import { Header, Footer } from '@/components/layout';
 import { Button, Card, EventCard } from '@/components/ui';
 import type { Event } from '@/types';
+import Link from 'next/link';
 
 // Mock data for demonstration - Updated to 2025
 const featuredEvents: Event[] = [
@@ -106,12 +107,16 @@ export default function HomePage() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-                <Button size="lg" className="px-8 py-4 text-lg">
-                  EXPLORE LATEST NEWS →
-                </Button>
-                <Button variant="secondary" size="lg" className="px-8 py-4 text-lg">
-                  WATCH VIDEOS
-                </Button>
+                <Link href="/events">
+                  <Button size="lg" className="px-8 py-4 text-lg">
+                    EXPLORE LATEST NEWS →
+                  </Button>
+                </Link>
+                <Link href="/videos">
+                  <Button variant="secondary" size="lg" className="px-8 py-4 text-lg">
+                    WATCH VIDEOS
+                  </Button>
+                </Link>
               </div>
 
               {/* Stats */}
@@ -142,18 +147,20 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {featuredEvents.map((event) => (
-                <EventCard
-                  key={event.id}
-                  event={event}
-                  onClick={() => console.log('Navigate to:', event.slug)}
-                />
+                <Link href={`/events/${event.slug}`} key={event.id}>
+                  <EventCard
+                    event={event}
+                  />
+                </Link>
               ))}
             </div>
 
             <div className="text-center mt-12">
-              <Button variant="secondary" size="lg">
-                VIEW ALL DEEP DIVES →
-              </Button>
+              <Link href="/events">
+                <Button variant="secondary" size="lg">
+                  VIEW ALL DEEP DIVES →
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
@@ -243,9 +250,11 @@ export default function HomePage() {
                     </div>
                     
                     <div className="mt-6 pt-4 border-t border-gray-700">
-                      <Button variant="ghost" size="sm" className="w-full">
-                        VIEW FULL TIMELINE →
-                      </Button>
+                      <Link href="/events">
+                        <Button variant="ghost" size="sm" className="w-full">
+                          VIEW FULL TIMELINE →
+                        </Button>
+                      </Link>
                     </div>
                   </Card>
                 </div>
