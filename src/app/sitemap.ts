@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { sampleVideos } from '@/content/videos/sample-videos';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://grok4.live';
@@ -28,11 +29,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/videos`,
       lastModified,
       changeFrequency: 'weekly' as const,
-      priority: 0.7,
+      priority: 0.9,
     },
   ];
 
-  // Featured articles
+  // Featured articles/events
   const articles = [
     {
       url: `${baseUrl}/events/mechahitler-incident-timeline`,
@@ -54,5 +55,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  return [...staticPages, ...articles];
+  // Video pages - 为每个视频生成sitemap条目
+  const videoPages = sampleVideos.map(video => ({
+    url: `${baseUrl}/videos/${video.id}`,
+    lastModified: new Date(video.publishedAt),
+    changeFrequency: 'weekly' as const,
+    priority: video.featured ? 0.8 : 0.7,
+  }));
+
+  return [...staticPages, ...articles, ...videoPages];
 } 
