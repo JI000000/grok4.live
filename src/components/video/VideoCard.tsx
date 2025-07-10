@@ -9,7 +9,6 @@ import type { Video } from '@/types';
 
 interface VideoCardProps {
   video: Video;
-  showPreview?: boolean;
   variant?: 'default' | 'featured' | 'compact';
   onLike?: (videoId: string) => void;
   onShare?: (video: Video) => void;
@@ -17,7 +16,6 @@ interface VideoCardProps {
 
 export function VideoCard({ 
   video, 
-  showPreview = false, 
   variant = 'default',
   onLike,
   onShare 

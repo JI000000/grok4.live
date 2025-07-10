@@ -5,7 +5,7 @@ import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
 import { Header, Footer } from '@/components/layout';
 import { Input, Button } from '@/components/ui';
 import { VideoCard } from '@/components/video/VideoCard';
-import { sampleVideos, videosByCategory } from '@/content/videos/sample-videos';
+import { sampleVideos } from '@/content/videos/sample-videos';
 import type { Video, VideoCategory } from '@/types';
 
 const categories = ['ALL', 'BREAKING', 'ANALYSIS', 'DEEP_DIVE', 'INTERVIEW', 'TUTORIAL', 'NEWS'] as const;
@@ -118,7 +118,6 @@ export default function VideosPage() {
                     key={video.id} 
                     video={video} 
                     variant="featured"
-                    showPreview={true}
                     onLike={handleLike}
                     onShare={handleShare}
                   />
@@ -194,13 +193,12 @@ export default function VideosPage() {
             {filteredVideos.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {regularVideos.map((video) => (
-                  <VideoCard 
-                    key={video.id} 
-                    video={video}
-                    showPreview={true}
-                    onLike={handleLike}
-                    onShare={handleShare}
-                  />
+                                  <VideoCard 
+                  key={video.id} 
+                  video={video}
+                  onLike={handleLike}
+                  onShare={handleShare}
+                />
                 ))}
               </div>
             ) : (

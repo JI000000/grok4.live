@@ -60,7 +60,6 @@ export function VideoRecommendationSection() {
             <VideoCard 
               key={video.id} 
               video={video}
-              showPreview={true}
               variant="featured"
               onLike={handleLike}
               onShare={handleShare}

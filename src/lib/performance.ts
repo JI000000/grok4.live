@@ -285,7 +285,7 @@ export function monitorCLS(): void {
   if (typeof window === 'undefined') return;
 
   let clsValue = 0;
-  let clsEntries: LayoutShift[] = [];
+  const clsEntries: LayoutShift[] = [];
 
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries() as LayoutShift[]) {

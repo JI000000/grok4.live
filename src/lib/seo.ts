@@ -107,7 +107,7 @@ export function generateVideoMetadata(video: Video): Metadata {
       ],
       videos: [
         {
-          url: video.url,
+          url: video.embedUrl,
           type: 'video/mp4',
           width: 1920,
           height: 1080,
@@ -124,8 +124,8 @@ export function generateVideoMetadata(video: Video): Metadata {
       images: [imageUrl],
       players: [
         {
-          playerUrl: video.url,
-          streamUrl: video.url,
+          playerUrl: video.embedUrl,
+          streamUrl: video.embedUrl,
           width: 1920,
           height: 1080,
         }
@@ -230,8 +230,8 @@ export function generateVideoStructuredData(video: Video) {
     "description": video.description,
     "thumbnailUrl": video.thumbnail,
     "uploadDate": video.publishedAt,
-    "contentUrl": video.url,
-    "embedUrl": video.url,
+    "contentUrl": video.embedUrl,
+    "embedUrl": video.embedUrl,
     "duration": video.duration ? `PT${video.duration}S` : undefined,
     "interactionStatistic": video.views ? {
       "@type": "InteractionCounter",

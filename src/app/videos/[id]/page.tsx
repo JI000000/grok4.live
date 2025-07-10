@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   HeartIcon, 
   ShareIcon, 
@@ -18,7 +19,6 @@ import { Button, Card } from '@/components/ui';
 import { VideoPlayer } from '@/components/video/VideoPlayer';
 import { VideoCard } from '@/components/video/VideoCard';
 import { sampleVideos } from '@/content/videos/sample-videos';
-import type { Video } from '@/types';
 
 interface PageProps {
   params: {
@@ -107,8 +107,6 @@ export default function VideoDetailPage({ params }: PageProps) {
               <div className="w-full">
                 <VideoPlayer 
                   video={video}
-                  onEnded={() => console.log('Video ended')}
-                  onProgress={(progress) => console.log('Progress:', progress)}
                 />
               </div>
 
@@ -262,10 +260,12 @@ export default function VideoDetailPage({ params }: PageProps) {
                       >
                         <div className="flex gap-3 p-3 rounded-lg bg-gray-900/30 hover:bg-gray-800/50 transition-colors">
                           <div className="relative w-24 aspect-video rounded overflow-hidden flex-shrink-0">
-                            <img
+                            <Image
                               src={relatedVideo.thumbnail}
                               alt={relatedVideo.title}
-                              className="w-full h-full object-cover"
+                              fill
+                              sizes="96px"
+                              className="object-cover"
                             />
                             <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
                               <PlayIcon className="w-6 h-6 text-white" />
@@ -344,7 +344,6 @@ export default function VideoDetailPage({ params }: PageProps) {
                   <VideoCard 
                     key={relatedVideo.id} 
                     video={relatedVideo}
-                    showPreview={true}
                   />
                 ))}
               </div>

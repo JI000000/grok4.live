@@ -2,20 +2,16 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { PlayIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
-import type { Video, ProgressData } from '@/types';
+import type { Video } from '@/types';
 
 interface VideoPlayerProps {
   video: Video;
   autoplay?: boolean;
-  onEnded?: () => void;
-  onProgress?: (progress: ProgressData) => void;
 }
 
 export function VideoPlayer({ 
   video, 
-  autoplay = false, 
-  onEnded, 
-  onProgress 
+  autoplay = false
 }: VideoPlayerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
