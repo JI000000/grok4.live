@@ -81,7 +81,7 @@ export function VideoCard({
           onMouseLeave={() => setIsHovering(false)}
         >
           {/* 缩略图容器 */}
-          <div className="relative w-full aspect-video overflow-hidden">
+          <div className="relative w-full aspect-video overflow-hidden bg-gray-800" style={{ minHeight: '200px' }}>
             
             {/* 缩略图 */}
             {!imageError ? (
@@ -99,6 +99,7 @@ export function VideoCard({
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 onError={() => setImageError(true)}
                 priority={variant === 'featured'}
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
               />
             ) : (
               <div className="w-full h-full bg-gray-800 flex items-center justify-center">

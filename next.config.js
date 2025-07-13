@@ -26,6 +26,11 @@ const nextConfig = {
         hostname: 'unsplash.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+        pathname: '/**',
+      },
     ],
     // Enable image formats
     formats: ['image/webp', 'image/avif'],
@@ -34,6 +39,11 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     // Enable optimization
     unoptimized: false,
+    // Add timeout and retry settings
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Timeout settings
+    minimumCacheTTL: 60,
   },
 
   // Compression

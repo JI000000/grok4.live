@@ -1,6 +1,6 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
+import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
 import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -50,72 +50,53 @@ const websiteStructuredData = {
   }
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#000000',
+}
+
 export const metadata: Metadata = {
-  title: {
-    default: 'Grok4.Live - The Unfiltered Chronicle of AI Evolution',
-    template: '%s | Grok4.Live',
-  },
-  description: 'The definitive source for tracking, analyzing, and reporting on xAI\'s Grok AI model evolution. Breaking news, in-depth analysis, and comprehensive coverage of AI\'s most unpredictable model.',
+  title: 'Grok4.Live - The Unfiltered Chronicle',
+  description: 'Tracking the evolution of AI\'s most unpredictable model. Deep dives, breaking news, and comprehensive analysis of Grok AI developments.',
   keywords: [
-    'Grok',
-    'xAI',
-    'Elon Musk',
-    'AI model',
-    'artificial intelligence',
-    'machine learning',
-    'AI news',
-    'tech analysis',
-    'MechaHitler incident',
-    'Grok 4 release',
-    'AI evolution',
-    'AI safety',
-    'language model',
+    'Grok AI', 'xAI', 'Elon Musk', 'AI News', 'Artificial Intelligence',
+    'Machine Learning', 'AI Safety', 'Grok 4', 'AI Analysis', 'Tech News',
+    'Grok 4 benchmarks', 'Heavy model', 'multi-agent AI', 'AI breakthrough',
+    'Humanity\'s Last Exam', 'Constitutional AI', 'AGI implications'
   ],
   authors: [{ name: 'Grok4.Live Editorial Team' }],
   creator: 'Grok4.Live',
   publisher: 'Grok4.Live',
-  metadataBase: new URL('https://grok4.live'),
-  alternates: {
-    canonical: '/',
-  },
+  robots: 'index, follow',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://grok4.live',
     siteName: 'Grok4.Live',
-    title: 'Grok4.Live - The Unfiltered Chronicle of AI Evolution',
-    description: 'The definitive source for tracking xAI\'s Grok AI model evolution. Breaking news, in-depth analysis, and comprehensive coverage.',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Grok4.Live - AI Evolution Tracking',
-      },
-    ],
+    title: 'Grok4.Live - The Unfiltered Chronicle',
+    description: 'Deep dives, breaking news, and comprehensive analysis of Grok AI developments.',
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@Grok4Live',
-    creator: '@Grok4Live',
-    title: 'Grok4.Live - The Unfiltered Chronicle of AI Evolution',
-    description: 'Breaking news and in-depth analysis of xAI\'s Grok AI model evolution.',
-    images: ['/og-image.jpg'],
+    site: '@grok4live',
+    creator: '@grok4live',
+    title: 'Grok4.Live - The Unfiltered Chronicle',
+    description: 'Deep dives, breaking news, and comprehensive analysis of Grok AI developments.',
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' }
+    ]
+  },
+  manifest: '/site.webmanifest',
+  alternates: {
+    canonical: 'https://grok4.live',
   },
   verification: {
     google: 'your-google-verification-code',
   },
+  category: 'Technology',
 };
 
 export default function RootLayout({

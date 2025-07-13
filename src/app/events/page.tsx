@@ -7,8 +7,44 @@ import { EventCard, Button, Input } from '@/components/ui';
 import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
 import type { Event } from '@/types';
 
-// Mock events data - 只包含实际存在的文章
+// Mock events data - 包含所有6篇文章
 const allEvents: Event[] = [
+  {
+    id: '4',
+    title: 'GROK 4 BENCHMARKS DECODED: The AI That Crushed Every Test',
+    description: 'Comprehensive analysis of Grok 4\'s groundbreaking benchmark performance, including Humanity\'s Last Exam dominance and multi-agent architecture breakthrough.',
+    slug: 'grok-4-benchmarks-analysis',
+    timestamp: '2025-07-13T10:00:00Z',
+    tag: 'ANALYSIS',
+    tagColor: 'blue',
+    featured: true,
+    readingTime: 10,
+    views: 15847,
+  },
+  {
+    id: '5',
+    title: 'GROK 4 HEAVY: The $300 AI That Changes Everything',
+    description: 'Deep dive into Grok 4 Heavy\'s multi-agent architecture, premium pricing strategy, and why enterprise customers are willing to pay 10x more.',
+    slug: 'grok-4-heavy-analysis',
+    timestamp: '2025-07-13T08:00:00Z',
+    tag: 'ANALYSIS',
+    tagColor: 'blue',
+    featured: false,
+    readingTime: 12,
+    views: 9234,
+  },
+  {
+    id: '6',
+    title: 'LINDA YACCARINO RESIGNS: What It Means for Grok\'s Future',
+    description: 'Breaking analysis of Linda Yaccarino\'s resignation as X CEO and its strategic implications for Grok\'s development and xAI\'s independence.',
+    slug: 'linda-yaccarino-resignation-impact',
+    timestamp: '2025-07-12T20:00:00Z',
+    tag: 'BREAKING',
+    tagColor: 'red',
+    featured: false,
+    readingTime: 8,
+    views: 11567,
+  },
   {
     id: '1',
     title: 'THE MECHAHITLER INCIDENT: Complete Timeline',
@@ -17,7 +53,7 @@ const allEvents: Event[] = [
     timestamp: '2025-07-10T16:00:00Z',
     tag: 'BREAKING',
     tagColor: 'red',
-    featured: true,
+    featured: false,
     readingTime: 8,
     views: 12453,
   },
