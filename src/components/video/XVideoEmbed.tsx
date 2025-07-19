@@ -15,12 +15,11 @@ export function XVideoEmbed({ video }: XVideoEmbedProps) {
   const [embedTimeout, setEmbedTimeout] = useState(false);
 
   useEffect(() => {
-    // 设置超时检测 - 10秒后如果还没有渲染成功，显示备用方案
+    // 设置超时检测 - 15秒后如果还没有渲染成功，显示备用方案
     const timeoutId = setTimeout(() => {
-      console.log('X embed timeout - showing fallback');
       setEmbedTimeout(true);
       setIsLoading(false);
-    }, 10000);
+    }, 15000);
 
     // 动态加载X的widgets.js脚本
     const script = document.createElement('script');
@@ -29,8 +28,6 @@ export function XVideoEmbed({ video }: XVideoEmbedProps) {
     script.charset = 'utf-8';
     
     script.onload = () => {
-      console.log('X widgets.js loaded successfully');
-      
       // 重新渲染X嵌入
       if (typeof window !== 'undefined' && (window as any).twttr && (window as any).twttr.widgets) {
         (window as any).twttr.widgets.load(containerRef.current);
@@ -39,17 +36,14 @@ export function XVideoEmbed({ video }: XVideoEmbedProps) {
         setTimeout(() => {
           const tweetElement = containerRef.current?.querySelector('.twitter-tweet-rendered');
           if (tweetElement) {
-            console.log('X embed rendered successfully');
             setIsLoading(false);
             clearTimeout(timeoutId);
           } else {
-            console.log('X embed not rendered - showing fallback');
             setEmbedTimeout(true);
             setIsLoading(false);
           }
-        }, 3000); // 给3秒时间让X渲染
+        }, 5000); // 给5秒时间让X渲染
       } else {
-        console.error('X widgets not available');
         setEmbedFailed(true);
         setIsLoading(false);
         clearTimeout(timeoutId);
@@ -57,7 +51,6 @@ export function XVideoEmbed({ video }: XVideoEmbedProps) {
     };
     
     script.onerror = () => {
-      console.error('Failed to load X widgets.js');
       setEmbedFailed(true);
       setIsLoading(false);
       clearTimeout(timeoutId);

@@ -92,9 +92,9 @@ export function shareVideo(video: { title: string; description: string; id: stri
     });
   } else {
     // 降级到复制链接
-    navigator.clipboard.writeText(url).then(() => {
-      // 可以显示一个通知
-      console.log('Video link copied to clipboard');
+    navigator.clipboard.writeText(url).catch((error) => {
+      // 复制失败时的处理
+      console.error('Failed to copy video link:', error);
     });
   }
 } 

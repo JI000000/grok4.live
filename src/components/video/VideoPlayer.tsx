@@ -66,7 +66,8 @@ export function VideoPlayer({
     if (baseUrl.includes('x.com/i/broadcasts')) {
       // X 视频需要转换为正确的嵌入格式
       const broadcastId = baseUrl.split('/').pop();
-      return `https://x.com/i/broadcasts/1/embed/${broadcastId}?parent=localhost`;
+      const origin = typeof window !== 'undefined' ? window.location.origin : 'https://grok4.live';
+      return `https://x.com/i/broadcasts/1/embed/${broadcastId}?parent=${encodeURIComponent(origin)}`;
     }
     
     // YouTube 视频处理

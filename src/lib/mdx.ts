@@ -50,7 +50,8 @@ export function getMDXContentBySlug(slug: string): MDXContent | null {
       frontmatter: data,
     };
   } catch (error) {
-    console.error(`Error reading MDX file for slug ${slug}:`, error);
+    // 记录错误但不显示详细信息
+    console.error(`Error reading MDX file for slug ${slug}`);
     return null;
   }
 }

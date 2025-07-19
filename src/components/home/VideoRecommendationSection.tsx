@@ -8,9 +8,9 @@ import { featuredVideos } from '@/content/videos/sample-videos';
 import type { Video } from '@/types';
 
 export function VideoRecommendationSection() {
-  const handleLike = (videoId: string) => {
-    console.log('Liked video:', videoId);
-    // 这里实现点赞逻辑
+  const handleLike = (_videoId: string) => {
+    // 处理点赞逻辑
+    // 这里可以添加实际的点赞API调用
   };
 
   const handleShare = (video: Video) => {

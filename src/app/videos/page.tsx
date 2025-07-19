@@ -39,9 +39,9 @@ export default function VideosPage() {
   const featuredVideos = filteredVideos.filter(video => video.featured);
   const regularVideos = filteredVideos.filter(video => !video.featured);
 
-  const handleLike = (videoId: string) => {
-    console.log('Liked video:', videoId);
-    // 这里实现点赞逻辑
+  const handleLike = (_videoId: string) => {
+    // 处理点赞逻辑
+    // 这里可以添加实际的点赞API调用
   };
 
   const handleShare = (video: Video) => {
