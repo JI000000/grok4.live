@@ -9,9 +9,10 @@ interface ArticleLayoutProps {
   children: React.ReactNode;
   sidebar?: React.ReactNode;
   className?: string;
+  tldr?: string[];
 }
 
-export function ArticleLayout({ event, children, sidebar, className }: ArticleLayoutProps) {
+export function ArticleLayout({ event, children, sidebar, className, tldr }: ArticleLayoutProps) {
   const readingTime = event.content ? estimateReadingTime(event.content) : event.readingTime || 5;
 
   return (
@@ -48,17 +49,21 @@ export function ArticleLayout({ event, children, sidebar, className }: ArticleLa
               </p>
 
               {/* TL;DR Section */}
-              <div className="bg-gradient-to-r from-brand-500/10 to-purple-500/10 border border-brand-500/30 rounded-xl p-6 mb-8">
-                <h2 className="text-lg font-bold text-brand-400 mb-3 flex items-center gap-2">
-                  💡 TL;DR - Key Takeaways
-                </h2>
-                <ul className="space-y-2 text-gray-300">
-                  <li>• Major controversy erupted over AI safety protocols</li>
-                  <li>• Emergency response implemented within 6 hours</li>
-                  <li>• Community reaction sparked broader AI governance discussion</li>
-                  <li>• Technical fixes deployed to prevent similar incidents</li>
-                </ul>
-              </div>
+              {tldr && tldr.length > 0 && (
+                <div className="bg-gradient-to-r from-brand-500/10 to-purple-500/10 border border-brand-500/30 rounded-xl p-6 mb-8">
+                  <h2 className="text-lg font-bold text-brand-400 mb-3 flex items-center gap-2">
+                    💡 TL;DR - Key Takeaways
+                  </h2>
+                  <ul className="space-y-2 text-gray-300">
+                    {tldr.map((item, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <span className="text-brand-400 mt-1">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Meta Information */}
               <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400 border-b border-gray-800 pb-8">

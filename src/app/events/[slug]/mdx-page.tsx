@@ -6,7 +6,7 @@ import { ArticleLayout, TableOfContents, Card } from '@/components/ui';
 import { MDXRenderer } from '@/components/mdx/MDXRenderer';
 import { getMDXContentBySlug, getAllMDXSlugs } from '@/lib/mdx';
 import { getAdvancedRecommendations } from '@/lib/recommendations';
-import type { MDXContent } from '@/lib/mdx';
+
 
 interface PageProps {
   params: {

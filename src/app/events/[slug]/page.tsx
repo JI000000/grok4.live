@@ -1,11 +1,11 @@
-'use client';
-
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { Header, Footer } from '@/components/layout';
-import { ArticleLayout, Timeline, TableOfContents, Card } from '@/components/ui';
+import { ArticleLayout, TableOfContents, Card } from '@/components/ui';
 import { getMDXContentBySlug } from '@/lib/mdx';
-import type { Event } from '@/types';
+import { MDXRenderer } from '@/components/mdx/MDXRenderer';
+import Script from 'next/script';
+
 
 // 根据slug获取文章内容的函数（硬编码回退）
 function getArticleContent(slug: string) {
@@ -628,203 +628,9 @@ function getArticleContent(slug: string) {
   }
 }
 
-// Mock event data - 包含所有10篇文章
-const events: Record<string, Event> = {
-  'grok4-vs-chatgpt-comparison-2025': {
-    id: '8',
-    title: 'Grok 4 vs ChatGPT: Complete Performance Comparison 2025',
-    description: 'BREAKING: Grok 4 wins 7 out of 7 categories against ChatGPT. 25.4% vs 21% accuracy, 40% cheaper API costs, and revolutionary dual-architecture design.',
-    content: `BREAKING: Grok 4 vs ChatGPT comparison...`,
-    slug: 'grok4-vs-chatgpt-comparison-2025',
-    timestamp: '2025-07-19T12:00:00Z',
-    tag: 'BREAKING',
-    tagColor: 'red',
-    featured: true,
-    readingTime: 12,
-    views: 250000,
-    author: 'Grok4.Live Comparison Team',
-  },
-  'grok4-benchmark-performance-2025': {
-    id: '10',
-    title: 'Grok 4 Benchmark Performance: 25.4% Accuracy Breaks AI Records',
-    description: 'BREAKING: Grok 4 achieves 25.4% accuracy on "Humanity\'s Last Exam," surpassing ChatGPT\'s 21% and setting new AI performance records across all benchmarks.',
-    content: `BREAKING: Grok 4 benchmark analysis...`,
-    slug: 'grok4-benchmark-performance-2025',
-    timestamp: '2025-07-19T08:00:00Z',
-    tag: 'ANALYSIS',
-    tagColor: 'blue',
-    featured: false,
-    readingTime: 14,
-    views: 220000,
-    author: 'Grok4.Live Benchmark Team',
-  },
-  'grok4-api-pricing-guide': {
-    id: '9',
-    title: 'Grok 4 API Pricing & Developer Guide: Complete Analysis',
-    description: 'Revolutionary pricing: $3/1M tokens input (40% cheaper than ChatGPT). Complete developer guide with cost optimization strategies and enterprise integration.',
-    content: `Revolutionary Grok 4 API pricing...`,
-    slug: 'grok4-api-pricing-guide',
-    timestamp: '2025-07-19T10:00:00Z',
-    tag: 'DEVELOPER',
-    tagColor: 'green',
-    featured: false,
-    readingTime: 15,
-    views: 180000,
-    author: 'Grok4.Live API Team',
-  },
-  'grok4-x-broadcast-analysis': {
-    id: '7',
-    title: 'Grok4 Live: The Viral X Broadcast That Shook the AI World',
-    description: 'Exclusive analysis of the groundbreaking X broadcast that went viral globally. Watch the complete demonstration and understand why Grok4 is trending worldwide.',
-    content: `Exclusive analysis of the viral X broadcast...`,
-    slug: 'grok4-x-broadcast-analysis',
-    timestamp: '2025-07-18T10:00:00Z',
-    tag: 'BREAKING',
-    tagColor: 'red',
-    featured: true,
-    readingTime: 8,
-    views: 156000,
-    author: 'Grok4.Live Breaking News Team',
-  },
-  'grok-4-benchmarks-analysis': {
-    id: '4',
-    title: 'GROK 4 BENCHMARKS DECODED: The AI That Crushed Every Test',
-    description: 'Comprehensive analysis of Grok 4\'s groundbreaking benchmark performance, including Humanity\'s Last Exam dominance and multi-agent architecture breakthrough.',
-    content: `Comprehensive analysis of Grok 4 benchmarks...`,
-    slug: 'grok-4-benchmarks-analysis',
-    timestamp: '2025-07-13T10:00:00Z',
-    tag: 'ANALYSIS',
-    tagColor: 'blue',
-    featured: true,
-    readingTime: 10,
-    views: 15847,
-    author: 'Grok4.Live AI Research Team',
-  },
-  'grok-4-heavy-analysis': {
-    id: '5',
-    title: 'GROK 4 HEAVY: The $300 AI That Changes Everything',
-    description: 'Deep dive into Grok 4 Heavy\'s multi-agent architecture, premium pricing strategy, and why enterprise customers are willing to pay 10x more.',
-    content: `Deep dive into Grok 4 Heavy analysis...`,
-    slug: 'grok-4-heavy-analysis',
-    timestamp: '2025-07-13T08:00:00Z',
-    tag: 'ANALYSIS',
-    tagColor: 'blue',
-    featured: false,
-    readingTime: 12,
-    views: 9234,
-    author: 'Grok4.Live Business Team',
-  },
-  'linda-yaccarino-resignation-impact': {
-    id: '6',
-    title: 'LINDA YACCARINO RESIGNS: What It Means for Grok\'s Future',
-    description: 'Breaking analysis of Linda Yaccarino\'s resignation as X CEO and its strategic implications for Grok\'s development and xAI\'s independence.',
-    content: `Breaking analysis of Linda Yaccarino resignation...`,
-    slug: 'linda-yaccarino-resignation-impact',
-    timestamp: '2025-07-12T20:00:00Z',
-    tag: 'BREAKING',
-    tagColor: 'red',
-    featured: false,
-    readingTime: 8,
-    views: 11567,
-    author: 'Grok4.Live Editorial Team',
-  },
-  'mechahitler-incident-timeline': {
-    id: '1',
-    title: 'THE MECHAHITLER INCIDENT: Complete Timeline',
-    description: 'A comprehensive analysis of the July 4th weekend controversy that sent shockwaves through the AI community. This deep dive explores the technical failures, community reactions, and xAI\'s emergency response protocol.',
-    content: `This is the article content that would be loaded from MDX or API...`,
-    slug: 'mechahitler-incident-timeline',
-    timestamp: '2025-07-10T16:00:00Z',
-    tag: 'BREAKING',
-    tagColor: 'red',
-    featured: false,
-    readingTime: 8,
-    views: 12453,
-    author: 'Grok4.Live Editorial Team',
-  },
-  'grok-4-features-revealed': {
-    id: '2',
-    title: 'GROK 4 UNCOVERED: All Features Revealed',
-    description: 'Deep dive into the latest Grok 4 release with dual-version design, performance benchmarks, and comprehensive feature analysis.',
-    content: `Comprehensive analysis of Grok 4...`,
-    slug: 'grok-4-features-revealed',
-    timestamp: '2025-07-10T12:00:00Z',
-    tag: 'ANALYSIS',
-    tagColor: 'blue',
-    readingTime: 12,
-    views: 8762,
-    author: 'AI Research Team',
-  },
-  'grok-evolution-woke-to-anti-woke': {
-    id: '3',
-    title: 'GROK\'S EVOLUTION: From Woke to Anti-Woke Gone Wrong',
-    description: 'Tracking the ideological shifts in Grok\'s training and the unintended consequences that led to recent controversies.',
-    content: `Comprehensive analysis of Grok's evolution...`,
-    slug: 'grok-evolution-woke-to-anti-woke',
-    timestamp: '2025-07-10T08:00:00Z',
-    tag: 'INVESTIGATION',
-    tagColor: 'yellow',
-    readingTime: 15,
-    views: 6891,
-    author: 'Grok4.Live Editorial Team',
-  },
-};
 
-// Mock timeline data - Updated to 2025
-const timelineData = [
-  {
-    id: '1',
-    timestamp: '2025-07-04T10:00:00Z',
-    title: 'Initial Incident Reported',
-    description: 'First reports of controversial AI responses surface on social media platforms, triggering widespread concern.',
-    type: 'major' as const,
-    source: 'Twitter Community',
-  },
-  {
-    id: '2',
-    timestamp: '2025-07-04T14:30:00Z',
-    title: 'xAI Acknowledges Issue',
-    description: 'Official acknowledgment from xAI team about the problematic outputs and commitment to immediate investigation.',
-    type: 'highlight' as const,
-    source: 'xAI Official Blog',
-  },
-  {
-    id: '3',
-    timestamp: '2025-07-04T16:45:00Z',
-    title: 'Emergency Response Activated',
-    description: 'Technical teams deployed emergency protocols to mitigate further incidents and implement safety measures.',
-    type: 'major' as const,
-    source: 'Internal Documentation',
-  },
-  {
-    id: '4',
-    timestamp: '2025-07-05T09:00:00Z',
-    title: 'Community Guidelines Updated',
-    description: 'Comprehensive review and update of community guidelines and safety protocols implemented.',
-    type: 'minor' as const,
-    source: 'Policy Team',
-  },
-  {
-    id: '5',
-    timestamp: '2025-07-06T11:20:00Z',
-    title: 'Technical Fix Deployed',
-    description: 'Advanced filtering algorithms and safety mechanisms deployed to prevent similar incidents in the future.',
-    type: 'highlight' as const,
-    source: 'Engineering Team',
-  },
-];
 
-// Mock TOC data
-const tocItems = [
-  { id: 'overview', title: 'Overview', level: 2 },
-  { id: 'timeline', title: 'Complete Timeline', level: 2 },
-  { id: 'technical-analysis', title: 'Technical Analysis', level: 2 },
-  { id: 'safety-measures', title: 'Safety Measures', level: 3 },
-  { id: 'algorithm-updates', title: 'Algorithm Updates', level: 3 },
-  { id: 'community-impact', title: 'Community Impact', level: 2 },
-  { id: 'lessons-learned', title: 'Lessons Learned', level: 2 },
-  { id: 'conclusion', title: 'Conclusion', level: 2 },
-];
+
 
 interface PageProps {
   params: {
@@ -833,19 +639,178 @@ interface PageProps {
 }
 
 export default function EventPage({ params }: PageProps) {
-  // 首先尝试获取MDX内容（仅在服务端）
-  let mdxContent = null;
-  if (typeof window === 'undefined') {
-    mdxContent = getMDXContentBySlug(params.slug);
-  }
+
+  // 优先使用MDX内容
+  const mdxContent = getMDXContentBySlug(params.slug);
   
-  // 如果MDX内容存在，重定向到MDX页面
   if (mdxContent) {
-    // 使用window.location进行客户端重定向
-    if (typeof window !== 'undefined') {
-      window.location.href = `/events/${params.slug}/mdx-page`;
-      return null;
-    }
+    // 使用MDX内容
+    const event = {
+      id: mdxContent.slug,
+      title: mdxContent.title,
+      description: mdxContent.description,
+      slug: mdxContent.slug,
+      timestamp: mdxContent.publishedAt,
+      tag: mdxContent.category,
+      tagColor: (mdxContent.category === 'BREAKING' ? 'red' : 
+                mdxContent.category === 'ANALYSIS' ? 'blue' : 
+                mdxContent.category === 'DEVELOPER' ? 'green' : 'purple') as 'red' | 'blue' | 'green' | 'purple' | 'yellow',
+      featured: mdxContent.featured,
+      readingTime: mdxContent.readingTime,
+      views: 0,
+      author: mdxContent.author,
+      content: mdxContent.content
+    };
+
+    // 生成目录
+    const tocItems = generateTOC(mdxContent.content);
+
+    return (
+      <>
+        <Header />
+        {/* Article Structured Data */}
+        <Script
+          id="article-structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": event.title,
+              "description": event.description,
+              "author": {
+                "@type": "Organization",
+                "name": event.author
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Grok4.Live",
+                "url": "https://grok4.live"
+              },
+              "datePublished": event.timestamp,
+              "dateModified": event.timestamp,
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": `https://grok4.live/events/${event.slug}`
+              },
+              "image": "https://grok4.live/og-image.jpg",
+              "keywords": "Grok 4, ChatGPT, AI Comparison, Benchmarks, Performance, API Pricing",
+              "articleSection": "Technology",
+              "wordCount": mdxContent.content.split(' ').length
+            })
+          }}
+        />
+        {/* FAQ Structured Data */}
+        <Script
+          id="faq-structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "How much better is Grok 4 than ChatGPT?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Grok 4 achieves 25.4% accuracy on \"Humanity's Last Exam\" compared to ChatGPT's 21%, representing a 21% improvement in comprehensive reasoning capabilities."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What makes Grok 4 more cost-effective?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Grok 4's input costs are $3/1M tokens, which is 40% cheaper than ChatGPT's $5/1M tokens, while maintaining superior performance across all benchmarks."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How does Grok 4's dual-architecture work?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Grok 4 uses a revolutionary dual-architecture design with separate performance and safety brains, allowing dedicated optimization of each aspect without compromising the other."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What is Grok 4's context window size?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Grok 4 features a 1M token context window, which is 8x larger than ChatGPT's 128K tokens, enabling processing of entire research papers in single contexts."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How often does Grok 4 learn and improve?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Grok 4 receives real-time updates every 6 hours, ensuring continuously improving performance compared to ChatGPT's periodic model updates."
+                  }
+                }
+              ]
+            })
+          }}
+        />
+        <ArticleLayout 
+          event={event}
+          sidebar={
+            <>
+              {/* 目录 */}
+              <TableOfContents items={tocItems} />
+              
+              {/* 相关文章 */}
+              <Card>
+                <div className="flex items-center gap-2 mb-4">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                  <h3 className="font-semibold">RELATED ARTICLES</h3>
+                </div>
+                <div className="space-y-3">
+                  {/* 这里可以添加相关文章逻辑 */}
+                  <div className="text-sm">
+                    <a href="#" className="text-blue-400 hover:text-blue-300">
+                      Grok 4 vs ChatGPT: Complete Performance Comparison...
+                    </a>
+                    <div className="text-gray-400 mt-1">12 min read</div>
+                  </div>
+                </div>
+              </Card>
+
+              {/* 分享 */}
+              <Card>
+                <div className="flex items-center gap-2 mb-4">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                  </svg>
+                  <h3 className="font-semibold">SHARE THIS ARTICLE</h3>
+                </div>
+                <div className="space-y-2">
+                  <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
+                    <span>X</span> Share on Twitter
+                  </button>
+                  <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
+                    <span>f</span> Share on Facebook
+                  </button>
+                  <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                    Copy Link
+                  </button>
+                </div>
+              </Card>
+            </>
+          }
+        >
+          {/* MDX内容渲染 */}
+          <MDXRenderer content={mdxContent.content} />
+        </ArticleLayout>
+        <Footer />
+      </>
+    );
   }
 
   // 回退到硬编码内容
@@ -868,151 +833,84 @@ export default function EventPage({ params }: PageProps) {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-900 text-white">
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* 主要内容 */}
-            <div className="lg:col-span-3">
-              <ArticleLayout event={{
-                id: params.slug,
-                title: getEventTitle(params.slug),
-                description: content.overview.trim(),
-                slug: params.slug,
-                timestamp: getEventTimestamp(params.slug),
-                tag: getEventTag(params.slug),
-                tagColor: getEventTagColor(params.slug),
-                featured: getEventFeatured(params.slug),
-                readingTime: getEventReadingTime(params.slug),
-                views: getEventViews(params.slug),
-                author: getEventAuthor(params.slug),
-                content: content.overview
-              }}>
-                {/* 文章头部 */}
-                <div className="mb-8">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      getEventTag(params.slug) === 'BREAKING' ? 'bg-red-500/20 text-red-400' :
-                      getEventTag(params.slug) === 'ANALYSIS' ? 'bg-blue-500/20 text-blue-400' :
-                      getEventTag(params.slug) === 'DEVELOPER' ? 'bg-green-500/20 text-green-400' :
-                      'bg-gray-500/20 text-gray-400'
-                    }`}>
-                      {getEventTag(params.slug)}
-                    </span>
-                    <span className="text-gray-400 text-sm">
-                      {new Date(getEventTimestamp(params.slug)).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </span>
-                  </div>
-                  
-                  <h1 className="text-4xl font-bold mb-4">{getEventTitle(params.slug)}</h1>
-                  <p className="text-xl text-gray-300 mb-6">{content.overview.trim()}</p>
-                  
-                  <div className="flex items-center gap-4 text-sm text-gray-400">
-                    <span>{getEventReadingTime(params.slug)} min read</span>
-                    <span>By {getEventAuthor(params.slug)}</span>
-                  </div>
-                </div>
-
-                {/* TL;DR 部分 */}
-                <div className="bg-gradient-to-r from-brand-500/10 to-purple-500/10 border border-brand-500/30 rounded-xl p-6 mb-8">
-                  <h2 className="text-lg font-bold text-brand-400 mb-3 flex items-center gap-2">💡 TL;DR - Key Takeaways</h2>
-                  <ul className="space-y-2">
-                    {content.tldr.map((item, index) => (
-                      <li key={index} className="text-gray-300 flex items-start gap-3">
-                        <span className="text-brand-400 mt-1">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* 文章内容 */}
-                <div className="prose prose-invert prose-lg max-w-none">
-                  {content.sections.map((section, index) => (
-                    <section key={index} id={`section-${index}`}>
-                      <h2 className="text-3xl font-bold text-white mb-6">{section.title}</h2>
-                      <div className="text-gray-300 leading-relaxed mb-8">
-                        {section.content}
-                      </div>
-                    </section>
-                  ))}
-                </div>
-
-                {/* 文章底部 */}
-                <div className="mt-12 pt-8 border-t border-gray-700">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-gray-400">
-                      Last updated: {new Date(getEventTimestamp(params.slug)).toLocaleDateString()}
-                    </div>
-                    <div className="flex gap-4">
-                      <button className="text-blue-400 hover:text-blue-300">
-                        Share on Twitter
-                      </button>
-                      <button className="text-blue-400 hover:text-blue-300">
-                        Copy Link
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </ArticleLayout>
-            </div>
-
-            {/* 侧边栏 */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-8 space-y-6">
-                {/* 目录 */}
-                <TableOfContents items={tocItems} />
-                
-                {/* 相关文章 */}
-                <Card>
-                  <div className="flex items-center gap-2 mb-4">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                    </svg>
-                    <h3 className="font-semibold">RELATED ARTICLES</h3>
-                  </div>
-                  <div className="space-y-3">
-                    {/* 这里可以添加相关文章逻辑 */}
-                    <div className="text-sm">
-                      <a href="#" className="text-blue-400 hover:text-blue-300">
-                        Grok 4 vs ChatGPT: Complete Performance Comparison...
-                      </a>
-                      <div className="text-gray-400 mt-1">12 min read</div>
-                    </div>
-                  </div>
-                </Card>
-
-                {/* 分享 */}
-                <Card>
-                  <div className="flex items-center gap-2 mb-4">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                    </svg>
-                    <h3 className="font-semibold">SHARE THIS ARTICLE</h3>
-                  </div>
-                  <div className="space-y-2">
-                    <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
-                      <span>X</span> Share on Twitter
-                    </button>
-                    <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
-                      <span>f</span> Share on Facebook
-                    </button>
-                    <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                      </svg>
-                      Copy Link
-                    </button>
-                  </div>
-                </Card>
+      <ArticleLayout 
+        event={{
+          id: params.slug,
+          title: getEventTitle(params.slug),
+          description: content.overview.trim(),
+          slug: params.slug,
+          timestamp: getEventTimestamp(params.slug),
+          tag: getEventTag(params.slug),
+          tagColor: getEventTagColor(params.slug),
+          featured: getEventFeatured(params.slug),
+          readingTime: getEventReadingTime(params.slug),
+          views: getEventViews(params.slug),
+          author: getEventAuthor(params.slug),
+          content: content.overview
+        }}
+        tldr={content.tldr}
+        sidebar={
+          <>
+            {/* 目录 */}
+            <TableOfContents items={tocItems} />
+            
+            {/* 相关文章 */}
+            <Card>
+              <div className="flex items-center gap-2 mb-4">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+                <h3 className="font-semibold">RELATED ARTICLES</h3>
               </div>
-            </div>
-          </div>
+              <div className="space-y-3">
+                {/* 这里可以添加相关文章逻辑 */}
+                <div className="text-sm">
+                  <a href="#" className="text-blue-400 hover:text-blue-300">
+                    Grok 4 vs ChatGPT: Complete Performance Comparison...
+                  </a>
+                  <div className="text-gray-400 mt-1">12 min read</div>
+                </div>
+              </div>
+            </Card>
+
+            {/* 分享 */}
+            <Card>
+              <div className="flex items-center gap-2 mb-4">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                </svg>
+                <h3 className="font-semibold">SHARE THIS ARTICLE</h3>
+              </div>
+              <div className="space-y-2">
+                <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
+                  <span>X</span> Share on Twitter
+                </button>
+                <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
+                  <span>f</span> Share on Facebook
+                </button>
+                <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                  Copy Link
+                </button>
+              </div>
+            </Card>
+          </>
+        }
+      >
+        {/* 文章内容 */}
+        <div className="prose prose-invert prose-lg max-w-none">
+          {content.sections.map((section, index) => (
+            <section key={index} id={`section-${index}`}>
+              <h2 className="text-3xl font-bold text-white mb-6">{section.title}</h2>
+              <div className="text-gray-300 leading-relaxed mb-8">
+                {section.content}
+              </div>
+            </section>
+          ))}
         </div>
-      </main>
+      </ArticleLayout>
       <Footer />
     </>
   );
@@ -1043,6 +941,37 @@ function parseContentSections(content: string) {
   }
   
   return sections;
+}
+
+// 生成目录
+function generateTOC(content: string) {
+  const lines = content.split('\n');
+  const tocItems: { id: string; title: string; level: number }[] = [];
+  let sectionIndex = 0;
+  
+  for (const line of lines) {
+    if (line.startsWith('## ')) {
+      const title = line.replace('## ', '').trim();
+      const id = `section-${sectionIndex}`;
+      tocItems.push({
+        id,
+        title,
+        level: 2,
+      });
+      sectionIndex++;
+    } else if (line.startsWith('### ')) {
+      const title = line.replace('### ', '').trim();
+      const id = `section-${sectionIndex}`;
+      tocItems.push({
+        id,
+        title,
+        level: 3,
+      });
+      sectionIndex++;
+    }
+  }
+  
+  return tocItems;
 }
 
 // 辅助函数

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime } from '@/lib/utils';
 import type { Event, TagColor } from '@/types';
@@ -41,9 +42,10 @@ export function EventCard({ event, onClick, className }: EventCardProps) {
     featured = false,
     views,
     readingTime,
+    slug,
   } = event;
 
-  return (
+  const cardContent = (
     <Card
       variant={featured ? 'featured' : 'default'}
       className={cn(
@@ -110,7 +112,18 @@ export function EventCard({ event, onClick, className }: EventCardProps) {
             READ FULL STORY →
           </span>
         </div>
-      </div>
-    </Card>
-  );
+              </div>
+      </Card>
+    );
+
+  // 如果有slug，使用Link包装，否则直接返回卡片内容
+  if (slug) {
+    return (
+      <Link href={`/events/${slug}`} className="block">
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return cardContent;
 } 
