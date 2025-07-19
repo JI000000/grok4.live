@@ -32,7 +32,7 @@ const tagIcons: Record<string, string> = {
   OFFICIAL: '🏢',
 };
 
-export function EventCard({ event, onClick, className }: EventCardProps) {
+export function EventCard({ event, className }: EventCardProps) {
   const {
     title,
     description,
@@ -53,7 +53,7 @@ export function EventCard({ event, onClick, className }: EventCardProps) {
         featured && 'col-span-full lg:col-span-2',
         className
       )}
-      onClick={onClick}
+      // 移除onClick，避免与Link冲突
     >
       {/* Tag */}
       {tag && (
@@ -112,9 +112,9 @@ export function EventCard({ event, onClick, className }: EventCardProps) {
             READ FULL STORY →
           </span>
         </div>
-              </div>
-      </Card>
-    );
+      </div>
+    </Card>
+  );
 
   // 如果有slug，使用Link包装，否则直接返回卡片内容
   if (slug) {
@@ -125,5 +125,6 @@ export function EventCard({ event, onClick, className }: EventCardProps) {
     );
   }
 
+  // 如果没有slug但有onClick，直接返回卡片内容
   return cardContent;
 } 

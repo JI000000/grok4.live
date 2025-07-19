@@ -316,11 +316,10 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {featuredEvents.map((event) => (
-                <Link href={`/events/${event.slug}`} key={event.id}>
-                  <EventCard
-                    event={event}
-                  />
-                </Link>
+                <EventCard
+                  key={event.id}
+                  event={event}
+                />
               ))}
             </div>
 
