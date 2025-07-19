@@ -4,9 +4,10 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import { Header, Footer } from '@/components/layout';
 import { ArticleLayout, Timeline, TableOfContents, Card } from '@/components/ui';
+import { getMDXContentBySlug } from '@/lib/mdx';
 import type { Event } from '@/types';
 
-// 根据slug获取文章内容的函数
+// 根据slug获取文章内容的函数（硬编码回退）
 function getArticleContent(slug: string) {
   switch (slug) {
     case 'grok4-vs-chatgpt-comparison-2025':
@@ -199,38 +200,25 @@ function getArticleContent(slug: string) {
           {
             title: 'Live Multi-Agent Demonstration',
             content: `
-              The broadcast's most compelling aspect was the live demonstration of Grok4's 32-agent 
-              collaborative reasoning system. Viewers witnessed real-time problem-solving as multiple AI 
-              agents worked together to tackle complex challenges, including the "Humanity's Last Exam" 
-              benchmark. This transparency in AI reasoning represents a paradigm shift in how we understand 
-              artificial intelligence.
+              The broadcast showcased Grok4's revolutionary multi-agent system in action, with 32 specialized 
+              agents collaborating to solve complex problems in real-time. This unprecedented transparency 
+              into AI reasoning processes captivated viewers worldwide.
             `
           },
           {
-            title: 'Global Impact and API Demand',
+            title: 'Global Impact and Reactions',
             content: `
-              The viral success has triggered a surge in API demand from developers worldwide. Tech companies 
-              and research institutions are requesting access to Grok4's multi-agent system, recognizing its 
-              potential for enterprise applications. The broadcast has also sparked discussions about the 
-              future of AI transparency and collaborative reasoning.
+              The broadcast's impact extended far beyond the AI community, with massive developer and 
+              enterprise adoption. API requests surged by 500%, while academic and research institutions 
+              showed unprecedented interest in multi-agent AI systems.
             `
           },
           {
-            title: 'Technical Breakthrough Analysis',
+            title: 'Future Implications',
             content: `
-              Analysis of the broadcast reveals a 127% performance improvement when using multi-agent 
-              collaboration versus single-agent approaches. The demonstration showed how 32 specialized 
-              agents can work together to solve problems that would be impossible for a single AI model, 
-              marking a significant advancement in artificial intelligence architecture.
-            `
-          },
-          {
-            title: 'Market Implications',
-            content: `
-              The viral broadcast has accelerated enterprise adoption interest, with over 100 Fortune 500 
-              companies requesting evaluations of Grok4 Heavy. The Asia-Pacific market, particularly China, 
-              shows the highest adoption potential, driven by the region's strong interest in AI innovation 
-              and the broadcast's global reach.
+              The viral broadcast's success has profound implications for AI development, setting new 
+              standards for transparency and multi-agent collaboration. The 300% increase in global search 
+              interest demonstrates the world's hunger for transparent, trustworthy AI systems.
             `
           }
         ]
@@ -845,215 +833,292 @@ interface PageProps {
 }
 
 export default function EventPage({ params }: PageProps) {
-  const event = events[params.slug];
+  // 首先尝试获取MDX内容（仅在服务端）
+  let mdxContent = null;
+  if (typeof window === 'undefined') {
+    mdxContent = getMDXContentBySlug(params.slug);
+  }
+  
+  // 如果MDX内容存在，重定向到MDX页面
+  if (mdxContent) {
+    // 使用window.location进行客户端重定向
+    if (typeof window !== 'undefined') {
+      window.location.href = `/events/${params.slug}/mdx-page`;
+      return null;
+    }
+  }
 
-  if (!event) {
+  // 回退到硬编码内容
+  const content = getArticleContent(params.slug);
+  
+  if (!content) {
     notFound();
   }
 
-  const articleContent = getArticleContent(params.slug);
-
-  // Related articles
-  const relatedEvents = Object.values(events)
-    .filter(e => e.id !== event.id)
-    .slice(0, 3);
-
-  const sidebar = (
-    <div className="space-y-8">
-      {/* Table of Contents */}
-      <Card>
-        <TableOfContents items={tocItems} />
-      </Card>
-
-      {/* Related Articles */}
-      <Card>
-        <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-          🔗 RELATED ARTICLES
-        </h3>
-        <div className="space-y-4">
-          {relatedEvents.map((relatedEvent) => (
-            <a
-              key={relatedEvent.id}
-              href={`/events/${relatedEvent.slug}`}
-              className="block p-3 rounded-lg bg-gray-900/50 hover:bg-gray-800/50 transition-colors"
-            >
-              <h4 className="text-sm font-medium text-white mb-1 line-clamp-2">
-                {relatedEvent.title}
-              </h4>
-              <p className="text-xs text-gray-400">
-                {relatedEvent.readingTime} min read
-              </p>
-            </a>
-          ))}
-        </div>
-      </Card>
-
-      {/* Social Sharing */}
-      <Card>
-        <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-          📤 SHARE THIS ARTICLE
-        </h3>
-        <div className="space-y-3">
-          <button className="w-full flex items-center gap-3 p-3 bg-gray-900/50 hover:bg-gray-800/50 rounded-lg transition-colors text-left">
-            <span className="text-blue-400">𝕏</span>
-            <span className="text-sm text-gray-300">Share on Twitter</span>
-          </button>
-          <button className="w-full flex items-center gap-3 p-3 bg-gray-900/50 hover:bg-gray-800/50 rounded-lg transition-colors text-left">
-            <span className="text-blue-600">📘</span>
-            <span className="text-sm text-gray-300">Share on Facebook</span>
-          </button>
-          <button className="w-full flex items-center gap-3 p-3 bg-gray-900/50 hover:bg-gray-800/50 rounded-lg transition-colors text-left">
-            <span className="text-blue-700">📎</span>
-            <span className="text-sm text-gray-300">Copy Link</span>
-          </button>
-        </div>
-      </Card>
-    </div>
-  );
+  // 解析内容中的章节
+  const sections = parseContentSections(content.overview + '\n\n' + content.sections.map(s => `## ${s.title}\n\n${s.content}`).join('\n\n'));
+  
+  // 生成目录
+  const tocItems = sections.map((section, index) => ({
+    id: `section-${index}`,
+    title: section.title,
+    level: 2,
+  }));
 
   return (
-    <div className="min-h-screen bg-black">
+    <>
       <Header />
-      
-      <ArticleLayout event={event} sidebar={sidebar}>
-        {/* Article Content */}
-        <div className="space-y-12">
-          
-          {/* TL;DR Section */}
-          {articleContent?.tldr && (
-            <div className="bg-gradient-to-r from-brand-500/10 to-purple-500/10 border border-brand-500/30 rounded-xl p-6">
-              <h3 className="text-xl font-bold text-brand-400 mb-4 flex items-center gap-2">
-                📋 TL;DR - Key Takeaways
-              </h3>
-              <ul className="space-y-2">
-                {articleContent.tldr.map((item, index) => (
-                  <li key={index} className="text-gray-300 flex items-start gap-3">
-                    <span className="text-brand-400 mt-1">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          
-          {/* Overview Section */}
-          <section id="overview">
-            <h2 className="text-3xl font-bold text-white mb-6">Overview</h2>
-            <p className="text-gray-300 leading-relaxed mb-6">
-              {articleContent?.overview || 'Content not available.'}
-            </p>
-          </section>
+      <main className="min-h-screen bg-gray-900 text-white">
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* 主要内容 */}
+            <div className="lg:col-span-3">
+              <ArticleLayout event={{
+                id: params.slug,
+                title: getEventTitle(params.slug),
+                description: content.overview.trim(),
+                slug: params.slug,
+                timestamp: getEventTimestamp(params.slug),
+                tag: getEventTag(params.slug),
+                tagColor: getEventTagColor(params.slug),
+                featured: getEventFeatured(params.slug),
+                readingTime: getEventReadingTime(params.slug),
+                views: getEventViews(params.slug),
+                author: getEventAuthor(params.slug),
+                content: content.overview
+              }}>
+                {/* 文章头部 */}
+                <div className="mb-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      getEventTag(params.slug) === 'BREAKING' ? 'bg-red-500/20 text-red-400' :
+                      getEventTag(params.slug) === 'ANALYSIS' ? 'bg-blue-500/20 text-blue-400' :
+                      getEventTag(params.slug) === 'DEVELOPER' ? 'bg-green-500/20 text-green-400' :
+                      'bg-gray-500/20 text-gray-400'
+                    }`}>
+                      {getEventTag(params.slug)}
+                    </span>
+                    <span className="text-gray-400 text-sm">
+                      {new Date(getEventTimestamp(params.slug)).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </span>
+                  </div>
+                  
+                  <h1 className="text-4xl font-bold mb-4">{getEventTitle(params.slug)}</h1>
+                  <p className="text-xl text-gray-300 mb-6">{content.overview.trim()}</p>
+                  
+                  <div className="flex items-center gap-4 text-sm text-gray-400">
+                    <span>{getEventReadingTime(params.slug)} min read</span>
+                    <span>By {getEventAuthor(params.slug)}</span>
+                  </div>
+                </div>
 
-          {/* Dynamic Sections */}
-          {articleContent?.sections.map((section, index) => (
-            <section key={index} id={`section-${index}`}>
-              <h2 className="text-3xl font-bold text-white mb-6">{section.title}</h2>
-              <div className="text-gray-300 leading-relaxed space-y-4">
-                {section.content.split('\n').map((paragraph, pIndex) => (
-                  paragraph.trim() && (
-                    <p key={pIndex} className="mb-4">
-                      {paragraph.trim()}
-                    </p>
-                  )
-                ))}
+                {/* TL;DR 部分 */}
+                <div className="bg-gradient-to-r from-brand-500/10 to-purple-500/10 border border-brand-500/30 rounded-xl p-6 mb-8">
+                  <h2 className="text-lg font-bold text-brand-400 mb-3 flex items-center gap-2">💡 TL;DR - Key Takeaways</h2>
+                  <ul className="space-y-2">
+                    {content.tldr.map((item, index) => (
+                      <li key={index} className="text-gray-300 flex items-start gap-3">
+                        <span className="text-brand-400 mt-1">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* 文章内容 */}
+                <div className="prose prose-invert prose-lg max-w-none">
+                  {content.sections.map((section, index) => (
+                    <section key={index} id={`section-${index}`}>
+                      <h2 className="text-3xl font-bold text-white mb-6">{section.title}</h2>
+                      <div className="text-gray-300 leading-relaxed mb-8">
+                        {section.content}
+                      </div>
+                    </section>
+                  ))}
+                </div>
+
+                {/* 文章底部 */}
+                <div className="mt-12 pt-8 border-t border-gray-700">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-gray-400">
+                      Last updated: {new Date(getEventTimestamp(params.slug)).toLocaleDateString()}
+                    </div>
+                    <div className="flex gap-4">
+                      <button className="text-blue-400 hover:text-blue-300">
+                        Share on Twitter
+                      </button>
+                      <button className="text-blue-400 hover:text-blue-300">
+                        Copy Link
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ArticleLayout>
+            </div>
+
+            {/* 侧边栏 */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-8 space-y-6">
+                {/* 目录 */}
+                <TableOfContents items={tocItems} />
+                
+                {/* 相关文章 */}
+                <Card>
+                  <div className="flex items-center gap-2 mb-4">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                    <h3 className="font-semibold">RELATED ARTICLES</h3>
+                  </div>
+                  <div className="space-y-3">
+                    {/* 这里可以添加相关文章逻辑 */}
+                    <div className="text-sm">
+                      <a href="#" className="text-blue-400 hover:text-blue-300">
+                        Grok 4 vs ChatGPT: Complete Performance Comparison...
+                      </a>
+                      <div className="text-gray-400 mt-1">12 min read</div>
+                    </div>
+                  </div>
+                </Card>
+
+                {/* 分享 */}
+                <Card>
+                  <div className="flex items-center gap-2 mb-4">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                    </svg>
+                    <h3 className="font-semibold">SHARE THIS ARTICLE</h3>
+                  </div>
+                  <div className="space-y-2">
+                    <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
+                      <span>X</span> Share on Twitter
+                    </button>
+                    <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
+                      <span>f</span> Share on Facebook
+                    </button>
+                    <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                      </svg>
+                      Copy Link
+                    </button>
+                  </div>
+                </Card>
               </div>
-            </section>
-          ))}
-
-          {/* Timeline Section - Only for MechaHitler incident */}
-          {params.slug === 'mechahitler-incident-timeline' && (
-            <section id="timeline">
-              <h2 className="text-3xl font-bold text-white mb-8">Complete Timeline</h2>
-              <p className="text-gray-300 leading-relaxed mb-8">
-                Here's a detailed chronological breakdown of events as they unfolded during the critical 48-hour period:
-              </p>
-              <Timeline items={timelineData} />
-            </section>
-          )}
-
-          {/* Analysis Section */}
-          <section id="analysis" className="space-y-8">
-            <h2 className="text-3xl font-bold text-white mb-6">Our Analysis</h2>
-            
-            <div className="bg-gradient-to-r from-purple-500/10 to-brand-500/10 border border-purple-500/30 rounded-xl p-6">
-              <h3 className="text-xl font-bold text-purple-400 mb-3 flex items-center gap-2">
-                🔬 Expert Assessment
-              </h3>
-              <p className="text-gray-300 leading-relaxed">
-                {params.slug === 'grok-4-benchmarks-analysis' && 
-                  'Our analysis reveals that Grok 4\'s breakthrough performance represents a fundamental shift in AI capability. The multi-agent architecture appears to be the key innovation that enables unprecedented reasoning abilities.'
-                }
-                {params.slug === 'grok-4-heavy-analysis' && 
-                  'The $300 pricing strategy reflects the true computational cost of running 32 parallel agents while positioning Grok 4 Heavy as a premium enterprise solution. This pricing model could reshape the AI industry.'
-                }
-                {params.slug === 'linda-yaccarino-resignation-impact' && 
-                  'Yaccarino\'s resignation signals a strategic pivot toward AI-first operations. This could accelerate Grok integration and position X as the first major social platform with native AI capabilities.'
-                }
-                {params.slug === 'mechahitler-incident-timeline' && 
-                  'The incident highlights critical gaps in AI safety protocols and demonstrates the challenges of content moderation at scale. The rapid response shows xAI\'s commitment to addressing safety concerns.'
-                }
-                {params.slug === 'grok-4-features-revealed' && 
-                  'Grok 4\'s dual-version architecture represents a new paradigm in AI accessibility. The tiered approach democratizes access while providing premium capabilities for demanding applications.'
-                }
-                {params.slug === 'grok-evolution-woke-to-anti-woke' && 
-                  'The ideological retraining process reveals the complexity of AI alignment. This case study demonstrates the challenges of implementing ideological changes without creating new biases.'
-                }
-                {params.slug === 'grok4-vs-chatgpt-comparison-2025' && 
-                  'Our comprehensive comparison reveals Grok 4\'s consistent superiority across all performance metrics. The combination of higher accuracy, lower costs, and innovative architecture makes Grok 4 the clear choice for developers and enterprises seeking cutting-edge AI capabilities.'
-                }
-                {params.slug === 'grok4-benchmark-performance-2025' && 
-                  'Grok 4\'s 25.4% accuracy on "Humanity\'s Last Exam" represents a quantum leap in AI capability. The multi-agent architecture and continuous learning system demonstrate unprecedented reasoning abilities that could accelerate progress toward artificial general intelligence.'
-                }
-                {params.slug === 'grok4-api-pricing-guide' && 
-                  'Grok 4\'s revolutionary pricing strategy offers unprecedented value for developers and enterprises. The 40% cost savings combined with superior performance creates a compelling case for migration from existing AI solutions.'
-                }
-                {params.slug === 'grok4-x-broadcast-analysis' && 
-                  'The viral X broadcast demonstrates Grok 4\'s real-world capabilities and global appeal. The multi-agent collaborative reasoning system represents a paradigm shift in AI transparency and problem-solving approaches.'
-                }
-              </p>
             </div>
-          </section>
-
-          {/* Conclusion */}
-          <section id="conclusion">
-            <h2 className="text-3xl font-bold text-white mb-6">Conclusion</h2>
-            <p className="text-gray-300 leading-relaxed mb-6">
-              {params.slug === 'grok-4-benchmarks-analysis' && 
-                'Grok 4\'s benchmark achievements mark a turning point in AI development. The multi-agent architecture opens new possibilities for complex reasoning and collaborative problem-solving that could accelerate progress toward artificial general intelligence.'
-              }
-              {params.slug === 'grok-4-heavy-analysis' && 
-                'Grok 4 Heavy\'s premium pricing strategy reflects the true value of advanced AI capabilities. For enterprises that can leverage its full potential, the ROI justifies the investment and sets a new standard for AI pricing.'
-              }
-              {params.slug === 'linda-yaccarino-resignation-impact' && 
-                'Yaccarino\'s departure represents a strategic inflection point for both X and xAI. The accelerated AI integration timeline could transform X into the world\'s first AI-native social media platform.'
-              }
-              {params.slug === 'mechahitler-incident-timeline' && 
-                'The MechaHitler incident serves as a crucial learning experience for the AI industry. The rapid response and implemented safeguards demonstrate the importance of proactive safety measures in AI development.'
-              }
-              {params.slug === 'grok-4-features-revealed' && 
-                'Grok 4\'s feature set represents a significant advancement in AI capability. The dual-version architecture and enhanced performance benchmarks position it as a leader in the next generation of AI systems.'
-              }
-              {params.slug === 'grok-evolution-woke-to-anti-woke' && 
-                'Grok\'s evolution illustrates the ongoing challenges in AI alignment and bias management. This case study provides valuable insights for the entire AI industry on the complexities of ideological training.'
-              }
-              {params.slug === 'grok4-vs-chatgpt-comparison-2025' && 
-                'Grok 4\'s comprehensive victory over ChatGPT across all performance categories signals a paradigm shift in the AI landscape. With superior accuracy, lower costs, and innovative architecture, Grok 4 is positioned to dominate the AI market and accelerate the development of artificial general intelligence.'
-              }
-              {params.slug === 'grok4-benchmark-performance-2025' && 
-                'Grok 4\'s benchmark achievements mark a turning point in AI development. The 25.4% accuracy on "Humanity\'s Last Exam" combined with multi-agent architecture opens new possibilities for complex reasoning that could accelerate progress toward artificial general intelligence.'
-              }
-              {params.slug === 'grok4-api-pricing-guide' && 
-                'Grok 4\'s revolutionary pricing strategy and comprehensive API capabilities position it as the premier choice for AI development. The combination of superior performance, lower costs, and enterprise features creates an unprecedented value proposition for developers and organizations.'
-              }
-              {params.slug === 'grok4-x-broadcast-analysis' && 
-                'The viral X broadcast has fundamentally changed how the world perceives AI capabilities. Grok 4\'s multi-agent collaborative reasoning system represents a breakthrough in AI transparency and problem-solving that could reshape the entire industry.'
-              }
-            </p>
-          </section>
+          </div>
         </div>
-      </ArticleLayout>
-
+      </main>
       <Footer />
-    </div>
+    </>
   );
+}
+
+// 解析内容章节
+function parseContentSections(content: string) {
+  const lines = content.split('\n');
+  const sections: { title: string; content: string }[] = [];
+  let currentSection = { title: '', content: '' };
+  
+  for (const line of lines) {
+    if (line.startsWith('## ')) {
+      if (currentSection.title) {
+        sections.push(currentSection);
+      }
+      currentSection = {
+        title: line.replace('## ', ''),
+        content: ''
+      };
+    } else {
+      currentSection.content += line + '\n';
+    }
+  }
+  
+  if (currentSection.title) {
+    sections.push(currentSection);
+  }
+  
+  return sections;
+}
+
+// 辅助函数
+function getEventTitle(slug: string): string {
+  const titles: Record<string, string> = {
+    'grok4-vs-chatgpt-comparison-2025': 'Grok 4 vs ChatGPT: Complete Performance Comparison 2025',
+    'grok4-api-pricing-guide': 'Grok 4 API Pricing & Developer Guide: Complete Analysis',
+    'grok4-benchmark-performance-2025': 'Grok 4 Benchmark Performance: 25.4% Accuracy Breaks AI Records',
+    'grok4-x-broadcast-analysis': 'Grok4 Live: The Viral X Broadcast That Shook the AI World'
+  };
+  return titles[slug] || 'Article';
+}
+
+function getEventTimestamp(slug: string): string {
+  const timestamps: Record<string, string> = {
+    'grok4-vs-chatgpt-comparison-2025': '2025-07-19T12:00:00Z',
+    'grok4-api-pricing-guide': '2025-07-19T10:00:00Z',
+    'grok4-benchmark-performance-2025': '2025-07-19T08:00:00Z',
+    'grok4-x-broadcast-analysis': '2025-07-18T10:00:00Z'
+  };
+  return timestamps[slug] || '2025-07-19T00:00:00Z';
+}
+
+function getEventTag(slug: string): string {
+  const tags: Record<string, string> = {
+    'grok4-vs-chatgpt-comparison-2025': 'BREAKING',
+    'grok4-api-pricing-guide': 'DEVELOPER',
+    'grok4-benchmark-performance-2025': 'ANALYSIS',
+    'grok4-x-broadcast-analysis': 'BREAKING'
+  };
+  return tags[slug] || 'ANALYSIS';
+}
+
+function getEventTagColor(slug: string): 'red' | 'blue' | 'green' | 'purple' | 'yellow' {
+  const tag = getEventTag(slug);
+  return tag === 'BREAKING' ? 'red' : 
+         tag === 'ANALYSIS' ? 'blue' : 
+         tag === 'DEVELOPER' ? 'green' : 'purple';
+}
+
+function getEventFeatured(slug: string): boolean {
+  const featured: Record<string, boolean> = {
+    'grok4-vs-chatgpt-comparison-2025': true,
+    'grok4-api-pricing-guide': false,
+    'grok4-benchmark-performance-2025': false,
+    'grok4-x-broadcast-analysis': false
+  };
+  return featured[slug] || false;
+}
+
+function getEventReadingTime(slug: string): number {
+  const readingTimes: Record<string, number> = {
+    'grok4-vs-chatgpt-comparison-2025': 12,
+    'grok4-api-pricing-guide': 15,
+    'grok4-benchmark-performance-2025': 14,
+    'grok4-x-broadcast-analysis': 8
+  };
+  return readingTimes[slug] || 10;
+}
+
+function getEventViews(slug: string): number {
+  const views: Record<string, number> = {
+    'grok4-vs-chatgpt-comparison-2025': 250000,
+    'grok4-api-pricing-guide': 180000,
+    'grok4-benchmark-performance-2025': 220000,
+    'grok4-x-broadcast-analysis': 156000
+  };
+  return views[slug] || 0;
+}
+
+function getEventAuthor(slug: string): string {
+  const authors: Record<string, string> = {
+    'grok4-vs-chatgpt-comparison-2025': 'Grok4.Live Analysis Team',
+    'grok4-api-pricing-guide': 'Grok4.Live API Team',
+    'grok4-benchmark-performance-2025': 'Grok4.Live Benchmark Team',
+    'grok4-x-broadcast-analysis': 'Grok4.Live Social Media Team'
+  };
+  return authors[slug] || 'Grok4.Live Editorial Team';
 } 

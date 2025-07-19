@@ -4,7 +4,8 @@ import { Metadata } from 'next';
 import { Header, Footer } from '@/components/layout';
 import { ArticleLayout, TableOfContents, Card } from '@/components/ui';
 import { MDXRenderer } from '@/components/mdx/MDXRenderer';
-import { getMDXContentBySlug, getAllMDXSlugs, getRelatedMDXContents } from '@/lib/mdx';
+import { getMDXContentBySlug, getAllMDXSlugs } from '@/lib/mdx';
+import { getAdvancedRecommendations } from '@/lib/recommendations';
 import type { MDXContent } from '@/lib/mdx';
 
 interface PageProps {
@@ -61,7 +62,7 @@ export default function MDXEventPage({ params }: PageProps) {
   }
 
   // 获取相关文章
-  const relatedArticles = getRelatedMDXContents(params.slug, 3);
+  const relatedArticles = getAdvancedRecommendations(params.slug, undefined, 3);
   
   // 生成目录
   const tocItems = generateTOC(content.content);
@@ -114,14 +115,14 @@ export default function MDXEventPage({ params }: PageProps) {
                   </div>
                   <div className="space-y-3">
                     {relatedArticles.map((article) => (
-                      <div key={article.slug} className="text-sm">
+                      <div key={article.content.slug} className="text-sm">
                         <a 
-                          href={`/events/${article.slug}`} 
+                          href={`/events/${article.content.slug}`} 
                           className="text-blue-400 hover:text-blue-300 line-clamp-2"
                         >
-                          {article.title}
+                          {article.content.title}
                         </a>
-                        <div className="text-gray-400 mt-1">{article.readingTime} min read</div>
+                        <div className="text-gray-400 mt-1">{article.content.readingTime} min read</div>
                       </div>
                     ))}
                   </div>
