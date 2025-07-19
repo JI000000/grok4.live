@@ -1,352 +1,103 @@
-'use client';
-
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React from 'react';
 import { Header, Footer } from '@/components/layout';
-import { EventCard, Button, Input } from '@/components/ui';
-import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
+import { EventCard } from '@/components/ui';
+import { getAllMDXContents } from '@/lib/mdx';
 import type { Event } from '@/types';
 
-// Mock events data - 包含所有10篇文章
-const allEvents: Event[] = [
-  {
-    id: '7',
-    title: 'Grok4 Live: The Viral X Broadcast That Shook the AI World',
-    description: 'Exclusive analysis of the groundbreaking X broadcast that went viral globally. Watch the complete demonstration and understand why Grok4 is trending worldwide.',
-    slug: 'grok4-x-broadcast-analysis',
-    timestamp: '2025-07-18T10:00:00Z',
-    tag: 'BREAKING',
-    tagColor: 'red',
-    featured: false,
-    readingTime: 8,
-    views: 156000,
-  },
-  {
-    id: '8',
-    title: 'Grok 4 vs ChatGPT: Complete Performance Comparison 2025',
-    description: 'BREAKING: Grok 4 wins 7 out of 7 categories against ChatGPT. 25.4% vs 21% accuracy, 40% cheaper API costs, and revolutionary dual-architecture design.',
-    slug: 'grok4-vs-chatgpt-comparison-2025',
-    timestamp: '2025-07-19T12:00:00Z',
-    tag: 'BREAKING',
-    tagColor: 'red',
-    featured: true,
-    readingTime: 12,
-    views: 250000,
-  },
-  {
-    id: '10',
-    title: 'Grok 4 Benchmark Performance: 25.4% Accuracy Breaks AI Records',
-    description: 'BREAKING: Grok 4 achieves 25.4% accuracy on "Humanity\'s Last Exam," surpassing ChatGPT\'s 21% and setting new AI performance records across all benchmarks.',
-    slug: 'grok4-benchmark-performance-2025',
-    timestamp: '2025-07-19T08:00:00Z',
-    tag: 'ANALYSIS',
-    tagColor: 'blue',
-    featured: false,
-    readingTime: 14,
-    views: 220000,
-  },
-  {
-    id: '9',
-    title: 'Grok 4 API Pricing & Developer Guide: Complete Analysis',
-    description: 'Revolutionary pricing: $3/1M tokens input (40% cheaper than ChatGPT). Complete developer guide with cost optimization strategies and enterprise integration.',
-    slug: 'grok4-api-pricing-guide',
-    timestamp: '2025-07-19T10:00:00Z',
-    tag: 'DEVELOPER',
-    tagColor: 'green',
-    featured: false,
-    readingTime: 15,
-    views: 180000,
-  },
-  {
-    id: '4',
-    title: 'GROK 4 BENCHMARKS DECODED: The AI That Crushed Every Test',
-    description: 'Comprehensive analysis of Grok 4\'s groundbreaking benchmark performance, including Humanity\'s Last Exam dominance and multi-agent architecture breakthrough.',
-    slug: 'grok-4-benchmarks-analysis',
-    timestamp: '2025-07-13T10:00:00Z',
-    tag: 'ANALYSIS',
-    tagColor: 'blue',
-    featured: false,
-    readingTime: 10,
-    views: 15847,
-  },
-  {
-    id: '5',
-    title: 'GROK 4 HEAVY: The $300 AI That Changes Everything',
-    description: 'Deep dive into Grok 4 Heavy\'s multi-agent architecture, premium pricing strategy, and why enterprise customers are willing to pay 10x more.',
-    slug: 'grok-4-heavy-analysis',
-    timestamp: '2025-07-13T08:00:00Z',
-    tag: 'ANALYSIS',
-    tagColor: 'blue',
-    featured: false,
-    readingTime: 12,
-    views: 9234,
-  },
-  {
-    id: '6',
-    title: 'LINDA YACCARINO RESIGNS: What It Means for Grok\'s Future',
-    description: 'Breaking analysis of Linda Yaccarino\'s resignation as X CEO and its strategic implications for Grok\'s development and xAI\'s independence.',
-    slug: 'linda-yaccarino-resignation-impact',
-    timestamp: '2025-07-12T20:00:00Z',
-    tag: 'BREAKING',
-    tagColor: 'red',
-    featured: false,
-    readingTime: 8,
-    views: 11567,
-  },
-  {
-    id: '1',
-    title: 'THE MECHAHITLER INCIDENT: Complete Timeline',
-    description: 'A comprehensive analysis of the July 4th weekend controversy that sent shockwaves through the AI community. Explore the technical failures, community reactions, and xAI\'s emergency response.',
-    slug: 'mechahitler-incident-timeline',
-    timestamp: '2025-07-10T16:00:00Z',
-    tag: 'BREAKING',
-    tagColor: 'red',
-    featured: false,
-    readingTime: 8,
-    views: 12453,
-  },
-  {
-    id: '2',
-    title: 'GROK 4 UNCOVERED: All Features Revealed',
-    description: 'Deep dive into the latest Grok 4 release with dual-version design, performance benchmarks, and comprehensive feature analysis.',
-    slug: 'grok-4-features-revealed',
-    timestamp: '2025-07-10T12:00:00Z',
-    tag: 'ANALYSIS',
-    tagColor: 'blue',
-    readingTime: 12,
-    views: 8762,
-  },
-  {
-    id: '3',
-    title: 'GROK\'S EVOLUTION: From Woke to Anti-Woke Gone Wrong',
-    description: 'Tracking the ideological shifts in Grok\'s training and the unintended consequences that led to recent controversies.',
-    slug: 'grok-evolution-woke-to-anti-woke',
-    timestamp: '2025-07-10T08:00:00Z',
-    tag: 'INVESTIGATION',
-    tagColor: 'yellow',
-    readingTime: 15,
-    views: 6891,
-  },
-];
-
-const tags = ['ALL', 'BREAKING', 'ANALYSIS', 'INVESTIGATION', 'DEVELOPER'];
-
 export default function EventsPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTag, setSelectedTag] = useState('ALL');
-  const [sortBy, setSortBy] = useState<'newest' | 'popular' | 'reading-time'>('newest');
+  // 获取所有MDX内容
+  const mdxContents = getAllMDXContents();
+  
+  // 转换为Event格式
+  const allEvents: Event[] = mdxContents.map(content => ({
+    id: content.slug,
+    title: content.title,
+    description: content.description,
+    slug: content.slug,
+    timestamp: content.publishedAt,
+    tag: content.category,
+    tagColor: (content.category === 'BREAKING' ? 'red' : 
+              content.category === 'ANALYSIS' ? 'blue' : 
+              content.category === 'DEVELOPER' ? 'green' : 'purple') as 'red' | 'blue' | 'green' | 'purple' | 'yellow',
+    featured: content.featured,
+    readingTime: content.readingTime,
+    views: 0, // 暂时设为0，后续可从数据库获取
+  }));
 
-  // Filter and sort events
-  const filteredEvents = allEvents
-    .filter(event => {
-      const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           event.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesTag = selectedTag === 'ALL' || event.tag === selectedTag;
-      return matchesSearch && matchesTag;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'popular':
-          return (b.views || 0) - (a.views || 0);
-        case 'reading-time':
-          return (a.readingTime || 0) - (b.readingTime || 0);
-        case 'newest':
-        default:
-          return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
-      }
-    });
+  // 获取所有标签
+  const allTags = Array.from(new Set(allEvents.map(event => event.tag)));
+  const tags = ['ALL', ...allTags];
 
-  const featuredEvent = allEvents.find(event => event.featured);
-  const regularEvents = filteredEvents.filter(event => !event.featured);
+  // 计算统计数据
+  const totalViews = allEvents.reduce((sum, event) => sum + (event.views || 0), 0);
+  const avgReadingTime = Math.round(
+    allEvents.reduce((sum, event) => sum + (event.readingTime || 5), 0) / allEvents.length
+  );
 
   return (
-    <div className="min-h-screen bg-black">
+    <>
       <Header />
-      
-      <main className="pt-20">
-        {/* Page Header */}
-        <section className="py-16 bg-gradient-to-b from-gray-950/50 to-black">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
-                <span className="text-gradient bg-gradient-to-r from-brand-500 to-purple-500 bg-clip-text text-transparent">
-                  DEEP DIVES
-                </span>
-              </h1>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                Comprehensive analysis and investigation of the most important Grok AI developments. 
-                From technical breakthroughs to controversial incidents, we cover it all.
-              </p>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-brand-400 mb-2">{allEvents.length}</div>
-                <div className="text-gray-400">Deep Dive Articles</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-brand-400 mb-2">
-                  {allEvents.reduce((sum, event) => sum + (event.views || 0), 0).toLocaleString()}
-                </div>
-                <div className="text-gray-400">Total Views</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-brand-400 mb-2">
-                  {Math.round(allEvents.reduce((sum, event) => sum + (event.readingTime || 0), 0) / allEvents.length)}
-                </div>
-                <div className="text-gray-400">Avg. Read Time (min)</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Featured Article */}
-        {featuredEvent && (
-          <section className="py-16 bg-black">
-            <div className="max-w-7xl mx-auto px-6">
-              <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-2">
-                ⭐ FEATURED ANALYSIS
-              </h2>
-              <Link href={`/events/${featuredEvent.slug}`}>
-                <EventCard event={featuredEvent} />
-              </Link>
-            </div>
-          </section>
-        )}
-
-        {/* Filters and Search */}
-        <section className="py-8 bg-gray-950/30 sticky top-20 z-40 backdrop-blur-sm border-b border-gray-800">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
-              
-              {/* Search */}
-              <div className="flex-1 max-w-md">
-                <Input
-                  placeholder="Search articles..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  leftIcon={<MagnifyingGlassIcon className="w-4 h-4" />}
-                />
-              </div>
-
-              {/* Tag Filters */}
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <button
-                    key={tag}
-                    onClick={() => setSelectedTag(tag)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                      selectedTag === tag
-                        ? 'bg-brand-500 text-white'
-                        : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
-                    }`}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-
-              {/* Sort Options */}
-              <div className="flex items-center gap-2">
-                <FunnelIcon className="w-4 h-4 text-gray-400" />
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
-                  className="bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
-                >
-                  <option value="newest">Newest First</option>
-                  <option value="popular">Most Popular</option>
-                  <option value="reading-time">Quick Reads</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Articles Grid */}
-        <section className="py-16 bg-black">
-          <div className="max-w-7xl mx-auto px-6">
-            
-            {/* Results Info */}
-            <div className="mb-8">
-              <p className="text-gray-400">
-                Showing {filteredEvents.length} of {allEvents.length} articles
-                {selectedTag !== 'ALL' && ` in "${selectedTag}"`}
-                {searchQuery && ` matching "${searchQuery}"`}
-              </p>
-            </div>
-
-            {/* Articles Grid */}
-            {filteredEvents.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {regularEvents.map((event) => (
-                  <Link key={event.id} href={`/events/${event.slug}`}>
-                    <EventCard event={event} />
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16">
-                <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-xl font-semibold text-white mb-2">No articles found</h3>
-                <p className="text-gray-400 mb-6">
-                  Try adjusting your search criteria or browse all articles.
-                </p>
-                <Button 
-                  variant="secondary" 
-                  onClick={() => {
-                    setSearchQuery('');
-                    setSelectedTag('ALL');
-                  }}
-                >
-                  Clear Filters
-                </Button>
-              </div>
-            )}
-
-            {/* Load More */}
-            {filteredEvents.length > 0 && (
-              <div className="text-center mt-12">
-                <Button variant="secondary" size="lg">
-                  Load More Articles
-                </Button>
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* Newsletter CTA */}
-        <section className="py-16 bg-gray-950/50">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="text-3xl font-bold mb-4 text-gradient bg-gradient-to-r from-brand-500 to-purple-500 bg-clip-text text-transparent">
-              NEVER MISS AN ANALYSIS
-            </h2>
-            <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
-              Get our latest deep dives delivered to your inbox. Join thousands of AI enthusiasts 
-              who rely on our comprehensive coverage.
+      <main className="min-h-screen bg-gray-900 text-white pt-20">
+        <div className="container mx-auto px-6 py-12">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-6xl font-black mb-6">
+              Deep Dives
+            </h1>
+            <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+              In-depth analysis, breaking news, and comprehensive coverage of the AI revolution
             </p>
             
-            <div className="max-w-md mx-auto">
-              <div className="flex gap-3">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1"
-                />
-                <Button>
-                  SUBSCRIBE
-                </Button>
-              </div>
-              <p className="text-xs text-gray-500 mt-3">
-                Weekly digest • No spam • Unsubscribe anytime
-              </p>
+            {/* Stats */}
+            <div className="flex justify-center items-center gap-8 text-sm text-gray-400">
+              <span>{allEvents.length} articles</span>
+              <span>{totalViews.toLocaleString()} total views</span>
+              <span>{avgReadingTime} min avg read</span>
             </div>
           </div>
-        </section>
-      </main>
 
+          {/* Featured Article */}
+          {allEvents.filter(event => event.featured).length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold mb-6">Featured</h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {allEvents
+                  .filter(event => event.featured)
+                  .slice(0, 2)
+                  .map((event) => (
+                    <EventCard key={event.id} event={event} />
+                  ))}
+              </div>
+            </div>
+          )}
+
+          {/* Filter Tags */}
+          <div className="mb-8">
+            <div className="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <button
+                  key={tag}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    tag === 'ALL'
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Articles Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allEvents.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+        </div>
+      </main>
       <Footer />
-    </div>
+    </>
   );
 } 

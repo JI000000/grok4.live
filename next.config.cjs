@@ -1,3 +1,11 @@
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Enable React strict mode for better development experience
@@ -10,6 +18,8 @@ const nextConfig = {
   experimental: {
     // Enable modern bundling
     esmExternals: true,
+    // Enable MDX
+    mdxRs: true,
   },
 
   // Image optimization
@@ -224,4 +234,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig; 
+module.exports = withMDX(nextConfig); 
