@@ -7,8 +7,56 @@ import { EventCard, Button, Input } from '@/components/ui';
 import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
 import type { Event } from '@/types';
 
-// Mock events data - 包含所有6篇文章
+// Mock events data - 包含所有10篇文章
 const allEvents: Event[] = [
+  {
+    id: '7',
+    title: 'Grok4 Live: The Viral X Broadcast That Shook the AI World',
+    description: 'Exclusive analysis of the groundbreaking X broadcast that went viral globally. Watch the complete demonstration and understand why Grok4 is trending worldwide.',
+    slug: 'grok4-x-broadcast-analysis',
+    timestamp: '2025-07-18T10:00:00Z',
+    tag: 'BREAKING',
+    tagColor: 'red',
+    featured: false,
+    readingTime: 8,
+    views: 156000,
+  },
+  {
+    id: '8',
+    title: 'Grok 4 vs ChatGPT: Complete Performance Comparison 2025',
+    description: 'BREAKING: Grok 4 wins 7 out of 7 categories against ChatGPT. 25.4% vs 21% accuracy, 40% cheaper API costs, and revolutionary dual-architecture design.',
+    slug: 'grok4-vs-chatgpt-comparison-2025',
+    timestamp: '2025-07-19T12:00:00Z',
+    tag: 'BREAKING',
+    tagColor: 'red',
+    featured: true,
+    readingTime: 12,
+    views: 250000,
+  },
+  {
+    id: '10',
+    title: 'Grok 4 Benchmark Performance: 25.4% Accuracy Breaks AI Records',
+    description: 'BREAKING: Grok 4 achieves 25.4% accuracy on "Humanity\'s Last Exam," surpassing ChatGPT\'s 21% and setting new AI performance records across all benchmarks.',
+    slug: 'grok4-benchmark-performance-2025',
+    timestamp: '2025-07-19T08:00:00Z',
+    tag: 'ANALYSIS',
+    tagColor: 'blue',
+    featured: false,
+    readingTime: 14,
+    views: 220000,
+  },
+  {
+    id: '9',
+    title: 'Grok 4 API Pricing & Developer Guide: Complete Analysis',
+    description: 'Revolutionary pricing: $3/1M tokens input (40% cheaper than ChatGPT). Complete developer guide with cost optimization strategies and enterprise integration.',
+    slug: 'grok4-api-pricing-guide',
+    timestamp: '2025-07-19T10:00:00Z',
+    tag: 'DEVELOPER',
+    tagColor: 'green',
+    featured: false,
+    readingTime: 15,
+    views: 180000,
+  },
   {
     id: '4',
     title: 'GROK 4 BENCHMARKS DECODED: The AI That Crushed Every Test',
@@ -17,7 +65,7 @@ const allEvents: Event[] = [
     timestamp: '2025-07-13T10:00:00Z',
     tag: 'ANALYSIS',
     tagColor: 'blue',
-    featured: true,
+    featured: false,
     readingTime: 10,
     views: 15847,
   },
@@ -81,7 +129,7 @@ const allEvents: Event[] = [
   },
 ];
 
-const tags = ['ALL', 'BREAKING', 'ANALYSIS', 'INVESTIGATION'];
+const tags = ['ALL', 'BREAKING', 'ANALYSIS', 'INVESTIGATION', 'DEVELOPER'];
 
 export default function EventsPage() {
   const [searchQuery, setSearchQuery] = useState('');

@@ -36,6 +36,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Featured articles/events
   const articles = [
     {
+      url: `${baseUrl}/events/grok4-vs-chatgpt-comparison-2025`,
+      lastModified: new Date('2025-07-19'),
+      changeFrequency: 'daily' as const,
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/events/grok4-api-pricing-guide`,
+      lastModified: new Date('2025-07-19'),
+      changeFrequency: 'daily' as const,
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/events/grok4-benchmark-performance-2025`,
+      lastModified: new Date('2025-07-19'),
+      changeFrequency: 'daily' as const,
+      priority: 1.0,
+    },
+    {
       url: `${baseUrl}/events/mechahitler-incident-timeline`,
       lastModified,
       changeFrequency: 'weekly' as const,

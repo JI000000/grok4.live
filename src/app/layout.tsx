@@ -57,13 +57,14 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: 'Grok4.Live - The Unfiltered Chronicle',
-  description: 'Tracking the evolution of AI\'s most unpredictable model. Deep dives, breaking news, and comprehensive analysis of Grok AI developments.',
+  title: 'Grok4.Live - Grok 4 vs ChatGPT: Complete AI Comparison & Analysis',
+  description: 'BREAKING: Grok 4 wins 7/7 categories vs ChatGPT. 25.4% vs 21% accuracy, 40% cheaper API costs. Complete comparison, benchmarks, and developer guides.',
   keywords: [
-    'Grok AI', 'xAI', 'Elon Musk', 'AI News', 'Artificial Intelligence',
-    'Machine Learning', 'AI Safety', 'Grok 4', 'AI Analysis', 'Tech News',
-    'Grok 4 benchmarks', 'Heavy model', 'multi-agent AI', 'AI breakthrough',
-    'Humanity\'s Last Exam', 'Constitutional AI', 'AGI implications'
+    'Grok 4 vs ChatGPT', 'Grok 4 API pricing', 'Grok 4 benchmarks', 'Humanity\'s Last Exam',
+    'Grok AI', 'xAI', 'Elon Musk', 'AI News', 'Artificial Intelligence', 'Machine Learning',
+    'AI Safety', 'Grok 4', 'AI Analysis', 'Tech News', 'Heavy model', 'multi-agent AI',
+    'AI breakthrough', 'Constitutional AI', 'AGI implications', 'Grok 4 performance',
+    'ChatGPT comparison', 'AI model benchmarks', 'Grok 4 pricing', 'AI API costs'
   ],
   authors: [{ name: 'Grok4.Live Editorial Team' }],
   creator: 'Grok4.Live',
@@ -74,15 +75,15 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://grok4.live',
     siteName: 'Grok4.Live',
-    title: 'Grok4.Live - The Unfiltered Chronicle',
-    description: 'Deep dives, breaking news, and comprehensive analysis of Grok AI developments.',
+    title: 'Grok 4 vs ChatGPT: Complete AI Comparison & Analysis',
+    description: 'BREAKING: Grok 4 wins 7/7 categories vs ChatGPT. 25.4% vs 21% accuracy, 40% cheaper API costs. Complete comparison and benchmarks.',
   },
   twitter: {
     card: 'summary_large_image',
     site: '@grok4live',
     creator: '@grok4live',
-    title: 'Grok4.Live - The Unfiltered Chronicle',
-    description: 'Deep dives, breaking news, and comprehensive analysis of Grok AI developments.',
+    title: 'Grok 4 vs ChatGPT: Complete AI Comparison & Analysis',
+    description: 'BREAKING: Grok 4 wins 7/7 categories vs ChatGPT. 25.4% vs 21% accuracy, 40% cheaper API costs. Complete comparison and benchmarks.',
   },
   icons: {
     icon: [
@@ -157,6 +158,7 @@ export default function RootLayout({
         {/* Security headers */}
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://platform.twitter.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https://x.com https://www.youtube.com https://platform.twitter.com; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self';" />
       </head>
       <body className={inter.className}>
         {/* Google Analytics */}

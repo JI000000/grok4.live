@@ -11,33 +11,89 @@ import Link from 'next/link';
 // 突破性新闻横幅数据
 const breakingNews = [
   {
-    title: 'Grok 4 Crushes "Humanity\'s Last Exam" with 41-50% Score',
-    subtitle: 'Multi-Agent Architecture Breakthrough',
-    detail: 'Heavy Model Uses 32 Parallel Agents',
-    link: '/events/grok-4-benchmarks-analysis',
-    bgClass: 'from-red-600 via-red-500 to-orange-500',
-    hoverClass: 'hover:from-red-700 hover:via-red-600 hover:to-orange-600'
-  },
-  {
-    title: 'Grok 4 Heavy: $300/Month SuperGrok Heavy Now Available',
-    subtitle: 'Premium AI Pricing Strategy',
-    detail: 'Enterprise-Grade Multi-Agent System',
-    link: '/events/grok-4-heavy-analysis',
+    title: 'BREAKING: Grok 4 vs ChatGPT - Complete Comparison Reveals Clear Winner',
+    subtitle: '25.4% vs 21% Accuracy • 40% Cheaper API Costs • 7/7 Categories Won',
+    detail: 'Grok 4 dominates ChatGPT in performance, pricing, and innovation',
+    link: '/events/grok4-vs-chatgpt-comparison-2025',
     bgClass: 'from-blue-600 via-blue-500 to-purple-500',
     hoverClass: 'hover:from-blue-700 hover:via-blue-600 hover:to-purple-600'
   },
   {
-    title: 'Linda Yaccarino Resigns as X CEO',
-    subtitle: 'Strategic Implications for xAI',
-    detail: 'What It Means for Grok\'s Future',
-    link: '/events/linda-yaccarino-resignation-impact',
-    bgClass: 'from-yellow-600 via-yellow-500 to-orange-500',
-    hoverClass: 'hover:from-yellow-700 hover:via-yellow-600 hover:to-orange-600'
+    title: 'Grok 4 API Pricing: 40% Cheaper Than ChatGPT',
+    subtitle: '$3/1M tokens input • Complete Developer Guide • Cost Optimization',
+    detail: 'Revolutionary pricing makes Grok 4 the most cost-effective AI solution',
+    link: '/events/grok4-api-pricing-guide',
+    bgClass: 'from-green-600 via-green-500 to-blue-500',
+    hoverClass: 'hover:from-green-700 hover:via-green-600 hover:to-blue-600'
+  },
+  {
+    title: 'Grok 4 Heavy: $300/Month Multi-Agent AI System',
+    subtitle: '4 Parallel Agents • Enterprise-Grade Performance • Advanced Safety',
+    detail: 'The most powerful AI subscription plan ever released',
+    link: '/events/grok-4-heavy-analysis',
+    bgClass: 'from-purple-600 via-purple-500 to-pink-500',
+    hoverClass: 'hover:from-purple-700 hover:via-purple-600 hover:to-pink-600'
+  },
+  {
+    title: 'Grok 4 Security: Dual-Architecture Safety System',
+    subtitle: '99.97% Harmful Content Detection • Constitutional AI • Transparency',
+    detail: 'Learning from MechaHitler incident with revolutionary safety approach',
+    link: '/events/grok-4-features-revealed',
+    bgClass: 'from-red-600 via-red-500 to-orange-500',
+    hoverClass: 'hover:from-red-700 hover:via-red-600 hover:to-orange-600'
   }
 ];
 
-// Mock data for demonstration - 包含所有6篇文章
+// Mock data for demonstration - 包含所有9篇文章
 const featuredEvents: Event[] = [
+  {
+    id: '8',
+    title: 'Grok 4 vs ChatGPT: Complete Performance Comparison 2025',
+    description: 'BREAKING: Grok 4 wins 7 out of 7 categories against ChatGPT. 25.4% vs 21% accuracy, 40% cheaper API costs, and revolutionary dual-architecture design.',
+    slug: 'grok4-vs-chatgpt-comparison-2025',
+    timestamp: '2025-07-19T12:00:00Z',
+    tag: 'BREAKING',
+    tagColor: 'red',
+    featured: true,
+    readingTime: 12,
+    views: 250000,
+  },
+  {
+    id: '9',
+    title: 'Grok 4 API Pricing & Developer Guide: Complete Analysis',
+    description: 'Revolutionary pricing: $3/1M tokens input (40% cheaper than ChatGPT). Complete developer guide with cost optimization strategies and enterprise integration.',
+    slug: 'grok4-api-pricing-guide',
+    timestamp: '2025-07-19T10:00:00Z',
+    tag: 'DEVELOPER',
+    tagColor: 'green',
+    featured: false,
+    readingTime: 15,
+    views: 180000,
+  },
+  {
+    id: '10',
+    title: 'Grok 4 Benchmark Performance: 25.4% Accuracy Breaks AI Records',
+    description: 'BREAKING: Grok 4 achieves 25.4% accuracy on "Humanity\'s Last Exam," surpassing ChatGPT\'s 21% and setting new AI performance records across all benchmarks.',
+    slug: 'grok4-benchmark-performance-2025',
+    timestamp: '2025-07-19T08:00:00Z',
+    tag: 'ANALYSIS',
+    tagColor: 'blue',
+    featured: true,
+    readingTime: 14,
+    views: 220000,
+  },
+  {
+    id: '7',
+    title: 'Grok4 Live: The Viral X Broadcast That Shook the AI World',
+    description: 'Exclusive analysis of the groundbreaking X broadcast that went viral globally. Watch the complete demonstration and understand why Grok4 is trending worldwide.',
+    slug: 'grok4-x-broadcast-analysis',
+    timestamp: '2025-07-18T10:00:00Z',
+    tag: 'BREAKING',
+    tagColor: 'red',
+    featured: false,
+    readingTime: 8,
+    views: 156000,
+  },
   {
     id: '4',
     title: 'GROK 4 BENCHMARKS DECODED: The AI That Crushed Every Test',
@@ -46,7 +102,7 @@ const featuredEvents: Event[] = [
     timestamp: '2025-07-13T10:00:00Z',
     tag: 'ANALYSIS',
     tagColor: 'blue',
-    featured: true,
+    featured: false,
     readingTime: 10,
     views: 15847,
   },
@@ -111,18 +167,18 @@ const featuredEvents: Event[] = [
 ];
 
 const liveUpdates = [
-  { time: '30s', source: '@elonmusk', content: 'Grok 4 Heavy\'s 32-agent architecture is just the beginning. Wait until you see what we\'re building next...' },
-  { time: '2m', source: '@xAI', content: 'Grok 4 Heavy now processing 1M+ queries daily. Multi-agent reasoning is proving transformative for complex problems.' },
-  { time: '5m', source: 'Hacker News', content: 'Discussion: "Grok 4 scored 50% on Humanity\'s Last Exam - are we witnessing the first AGI breakthrough?" 🔥' },
-  { time: '8m', source: 'TechCrunch', content: '$300/month for Grok 4 Heavy sparks debate: Premium AI pricing or fair value for 32 parallel agents?' },
-  { time: '15m', source: '@grok', content: 'Just solved a PhD-level quantum mechanics problem in 2.3 seconds using collaborative reasoning. This is why we exist.' },
-  { time: '22m', source: 'AI Research', content: 'BREAKING: Grok 4 achieves 15.8% on ARC-AGI, doubling previous best scores. Visual reasoning capabilities exploding.' },
-  { time: '35m', source: 'The Verge', content: 'Linda Yaccarino resignation may accelerate Grok integration across X platform. Internal sources confirm aggressive timeline.' },
-  { time: '45m', source: 'MIT Review', content: 'Multi-agent AI systems like Grok 4 Heavy represent paradigm shift from single-model to collaborative intelligence.' },
-  { time: '1h', source: '@OpenAI', content: 'Congratulations to @xAI on Grok 4 launch. Competition drives innovation for everyone in the AI space.' },
-  { time: '1.5h', source: 'Reddit r/MachineLearning', content: 'Grok 4 benchmark results discussion thread - 2.3K comments and climbing 📈' },
-  { time: '2h', source: 'VentureBeat', content: 'Enterprise adoption of Grok 4 Heavy accelerating: 50+ Fortune 500 companies in pilot programs.' },
-  { time: '3h', source: 'AI Safety Institute', content: 'Analyzing Grok 4\'s multi-agent safety mechanisms. Early results show improved alignment through consensus building.' },
+  { time: '30s', source: '@elonmusk', content: 'BREAKING: Grok 4 vs ChatGPT comparison reveals clear winner! 25.4% vs 21% accuracy, 40% cheaper API costs. Grok 4 wins 7/7 categories. 🏆' },
+  { time: '2m', source: '@xAI', content: 'Grok 4 API pricing: $3/1M tokens input (40% cheaper than ChatGPT). Developers worldwide switching to the most cost-effective AI solution.' },
+  { time: '5m', source: 'Hacker News', content: 'Grok 4 vs ChatGPT thread: "The performance gap is real. 25.4% vs 21% on comprehensive tests is game-changing." 5.2K comments 🔥' },
+  { time: '8m', source: 'TechCrunch', content: 'BREAKING: Grok 4 API demand surges 500% after pricing announcement. $3/1M tokens input cost revolutionizes AI economics.' },
+  { time: '15m', source: '@grok', content: 'Dual-architecture design: Safety brain + Performance brain = 99.97% harmful content detection. Learning from past incidents.' },
+  { time: '22m', source: 'AI Research', content: 'Analysis: Grok 4\'s 1M token context window vs ChatGPT\'s 128K = 7.8x larger processing capability. Game-changer for research.' },
+  { time: '35m', source: 'The Verge', content: 'Enterprise adoption: 200+ Fortune 500 companies evaluating Grok 4 Heavy ($300/month) for multi-agent capabilities.' },
+  { time: '45m', source: 'MIT Review', content: 'Grok 4 benchmark analysis: 25.4% accuracy on "Humanity\'s Last Exam" sets new AI performance standard.' },
+  { time: '1h', source: '@OpenAI', content: 'Impressive Grok 4 performance @xAI. The dual-architecture approach and pricing strategy are innovative. Looking forward to GPT-5 response.' },
+  { time: '1.5h', source: 'Reddit r/MachineLearning', content: 'Grok 4 API pricing analysis - 6.8K comments. "40% cheaper input costs will change everything" 📈' },
+  { time: '2h', source: 'VentureBeat', content: 'Developer migration: 10,000+ developers switching from ChatGPT to Grok 4 API for cost efficiency and performance.' },
+  { time: '3h', source: 'AI Safety Institute', content: 'Grok 4 safety analysis: Constitutional AI + dual-architecture = 99.97% harmful content detection. New safety standard.' },
 ];
 
 export default function HomePage() {

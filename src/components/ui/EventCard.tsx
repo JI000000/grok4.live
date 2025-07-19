@@ -25,6 +25,7 @@ const tagIcons: Record<string, string> = {
   BREAKING: '⚡',
   ANALYSIS: '📊',
   INVESTIGATION: '🔍',
+  DEVELOPER: '💻',
   UPDATE: '📝',
   VIDEO: '🎥',
   OFFICIAL: '🏢',

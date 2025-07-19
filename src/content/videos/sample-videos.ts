@@ -2,6 +2,31 @@ import type { Video } from '@/types';
 
 export const sampleVideos: Video[] = [
   {
+    id: 'grok4-x-broadcast-2025',
+    title: 'Grok4 Live: The Viral X Broadcast That Shook the AI World',
+    description: 'Exclusive coverage of the groundbreaking X broadcast that went viral globally. Watch the complete demonstration of Grok4\'s latest capabilities and understand why it\'s trending worldwide.',
+    thumbnail: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=450&fit=crop&q=80',
+    embedUrl: 'https://x.com/i/broadcasts/1lDGLzplWnyxm',
+    duration: 1800, // 30 minutes estimated
+    quality: ['720p', '1080p'],
+    subtitles: [{ language: 'en', url: '/subtitles/grok4-x-broadcast-en.vtt', label: 'English' }],
+    views: 156000,
+    likes: 12400,
+    shares: 3200,
+    comments: 890,
+    publishedAt: '2025-07-18T10:00:00Z',
+    updatedAt: '2025-07-18T10:00:00Z',
+    category: 'BREAKING',
+    featured: true,
+    tags: ['Grok 4', 'X Broadcast', 'Live Demo', 'Viral', 'AI Trends', 'Breaking News'],
+    relatedArticles: ['grok4-x-broadcast-analysis'],
+    relatedVideos: ['16', '17', '18'],
+    isPublic: true,
+    allowComments: true,
+    allowEmbedding: true,
+    author: 'Grok4.Live Breaking News',
+  },
+  {
     id: '16',
     title: 'Grok 4 Benchmark Revolution: 50% on Humanity\'s Last Exam Explained',
     description: 'Deep dive into Grok 4\'s groundbreaking performance on the most challenging AI benchmark ever created. We analyze the multi-agent architecture that achieved unprecedented results.',
@@ -344,4 +369,6 @@ export const recentVideos = sampleVideos
 // Popular videos (sorted by views)
 export const popularVideos = sampleVideos
   .sort((a, b) => b.views - a.views)
-  .slice(0, 6); 
+  .slice(0, 6);
+
+export default sampleVideos; 

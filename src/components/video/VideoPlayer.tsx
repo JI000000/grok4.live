@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { PlayIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
 import type { Video } from '@/types';
 
+import { XVideoEmbed } from './XVideoEmbed';
+
 interface VideoPlayerProps {
   video: Video;
   autoplay?: boolean;
@@ -56,9 +58,18 @@ export function VideoPlayer({
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // 构建 YouTube URL，添加适当的参数
+  // 构建视频 URL，支持 YouTube 和 X 视频
   const getEmbedUrl = () => {
     const baseUrl = video.embedUrl;
+    
+    // 检查是否为 X 视频
+    if (baseUrl.includes('x.com/i/broadcasts')) {
+      // X 视频需要转换为正确的嵌入格式
+      const broadcastId = baseUrl.split('/').pop();
+      return `https://x.com/i/broadcasts/1/embed/${broadcastId}?parent=localhost`;
+    }
+    
+    // YouTube 视频处理
     const params = new URLSearchParams();
     
     if (autoplay || hasStarted) {
@@ -73,6 +84,15 @@ export function VideoPlayer({
     return `${baseUrl}${separator}${params.toString()}`;
   };
 
+  // 如果是X视频，使用官方嵌入方式
+  if (video.embedUrl.includes('x.com/i/broadcasts')) {
+    return (
+      <div ref={containerRef} className="relative w-full" style={{ aspectRatio: '16/9' }}>
+        <XVideoEmbed video={video} />
+      </div>
+    );
+  }
+
   return (
     <div 
       ref={containerRef}
@@ -81,14 +101,31 @@ export function VideoPlayer({
     >
       {/* 视频 iframe */}
       <div className="absolute inset-0">
-        <iframe
-          src={getEmbedUrl()}
-          title={video.title}
-          className="w-full h-full border-0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-          loading="lazy"
-        />
+        {video.embedUrl.includes('x.com/i/broadcasts') ? (
+          // X 视频使用特殊的嵌入方式
+          <iframe
+            src={`https://x.com/i/broadcasts/1/embed/${video.embedUrl.split('/').pop()}?parent=${typeof window !== 'undefined' ? encodeURIComponent(window.location.origin) : 'grok4.live'}&theme=dark`}
+            title={video.title}
+            className="w-full h-full border-0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            loading="lazy"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
+            referrerPolicy="no-referrer"
+            onLoad={() => setIsLoading(false)}
+          />
+        ) : (
+          // YouTube 和其他视频
+          <iframe
+            src={getEmbedUrl()}
+            title={video.title}
+            className="w-full h-full border-0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            loading="lazy"
+            onLoad={() => setIsLoading(false)}
+          />
+        )}
       </div>
 
       {/* 播放前覆盖层 */}
